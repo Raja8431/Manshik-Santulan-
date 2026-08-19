@@ -1,62 +1,39 @@
 "use strict";
-
-
 /* =========================================
-   FASTAPI BACKEND
+   FASTAPI BACKEND - RENDER
 ========================================= */
 
 const API_BASE =
     "https://manshik-santulan-api.onrender.com";
 
 
-
 /* =========================================
    HELPER
 ========================================= */
 
-const $ = (id) =>
-    document.getElementById(id);
-
+const $ = (id) => document.getElementById(id);
 
 
 /* =========================================
    ELEMENTS
 ========================================= */
 
-const form =
-    $("predict-form");
+const form = $("predict-form");
+const submitBtn = $("submit-btn");
 
-const submitBtn =
-    $("submit-btn");
+const idle = $("idle-state");
+const loading = $("loading-state");
+const result = $("result-state");
+const error = $("error-state");
 
-const idle =
-    $("idle-state");
+const analytics = $("analytics");
+const historyPanel = $("history-panel");
 
-const loading =
-    $("loading-state");
-
-const result =
-    $("result-state");
-
-const error =
-    $("error-state");
-
-const analytics =
-    $("analytics");
-
-const historyPanel =
-    $("history-panel");
-
-const stressInput =
-    $("stress_level");
-
+const stressInput = $("stress_level");
 
 let lifestyleChart = null;
-
 let historyChart = null;
-
 let lastPrediction = null;
-
 
 
 /* =========================================
@@ -65,22 +42,18 @@ let lastPrediction = null;
 
 function showState(state) {
 
-    [
-        idle,
-        loading,
-        result,
-        error
-    ].forEach((element) => {
+    [idle, loading, result, error].forEach((element) => {
 
-        element.classList.add("hidden");
+        if (element) {
+            element.classList.add("hidden");
+        }
 
     });
 
-
-    state.classList.remove("hidden");
-
+    if (state) {
+        state.classList.remove("hidden");
+    }
 }
-
 
 
 /* =========================================
@@ -89,77 +62,68 @@ function showState(state) {
 
 function getValue(id) {
 
-    return $(id).value;
+    const element = $(id);
+
+    if (!element) {
+        console.error(`Element not found: ${id}`);
+        return "";
+    }
+
+    return element.value;
 
 }
-
 
 
 /* =========================================
    THEME
 ========================================= */
 
-$("theme-btn").addEventListener(
-    "click",
-    () => {
+const themeBtn = $("theme-btn");
 
-        document.body.classList.toggle(
-            "light"
-        );
+if (themeBtn) {
 
+    themeBtn.addEventListener("click", () => {
 
-        $("theme-btn").textContent =
+        document.body.classList.toggle("light");
+
+        themeBtn.textContent =
             document.body.classList.contains("light")
                 ? "☀"
                 : "☾";
 
-    }
-);
+    });
 
+}
 
 
 /* =========================================
-   STRESS BUTTON
+   STRESS BUTTONS
 ========================================= */
 
 document
-    .querySelectorAll(
-        "#stress-buttons button"
-    )
+    .querySelectorAll("#stress-buttons button")
     .forEach((button) => {
 
+        button.addEventListener("click", () => {
 
-        button.addEventListener(
-            "click",
-            () => {
+            document
+                .querySelectorAll("#stress-buttons button")
+                .forEach((btn) => {
 
+                    btn.classList.remove("active");
 
-                document
-                    .querySelectorAll(
-                        "#stress-buttons button"
-                    )
-                    .forEach((btn) => {
+                });
 
-                        btn.classList.remove(
-                            "active"
-                        );
+            button.classList.add("active");
 
-                    });
-
-
-                button.classList.add(
-                    "active"
-                );
-
-
+            if (stressInput) {
                 stressInput.value =
                     button.dataset.value;
-
             }
-        );
+
+        });
 
     });
-
 
 
 /* =========================================
@@ -185,14 +149,10 @@ function createPayload() {
             getValue("academic_level"),
 
         most_used_platform:
-            getValue(
-                "most_used_platform"
-            ),
+            getValue("most_used_platform"),
 
         purpose_of_use:
-            getValue(
-                "purpose_of_use"
-            ),
+            getValue("purpose_of_use"),
 
         avg_daily_usage_hours:
             Number(
@@ -230,18 +190,15 @@ function createPayload() {
             ),
 
         stress_level:
-            getValue(
-                "stress_level"
-            )
+            getValue("stress_level")
 
     };
 
 }
 
 
-
 /* =========================================
-   AI RECOMMENDATIONS
+   RECOMMENDATIONS
 ========================================= */
 
 function getRecommendations(data) {
@@ -249,17 +206,15 @@ function getRecommendations(data) {
     const recommendations = [];
 
 
-    if (
-        data.sleep_hours_per_night < 6
-    ) {
+    /* Sleep */
+
+    if (data.sleep_hours_per_night < 6) {
 
         recommendations.push(
             "😴 Sleep: Your sleep is below 6 hours. Try to build a consistent sleep routine."
         );
 
-    }
-
-    else {
+    } else {
 
         recommendations.push(
             "😴 Sleep: Your reported sleep duration looks reasonable."
@@ -268,18 +223,15 @@ function getRecommendations(data) {
     }
 
 
+    /* Screen Time */
 
-    if (
-        data.avg_daily_usage_hours > 8
-    ) {
+    if (data.avg_daily_usage_hours > 8) {
 
         recommendations.push(
             "📱 Screen Time: Consider reducing long screen sessions and taking digital breaks."
         );
 
-    }
-
-    else {
+    } else {
 
         recommendations.push(
             "📱 Screen Time: Keep taking regular breaks during long digital sessions."
@@ -288,22 +240,26 @@ function getRecommendations(data) {
     }
 
 
+    /* Physical Activity */
 
-    if (
-        data.physical_activity_hours < 0.5
-    ) {
+    if (data.physical_activity_hours < 0.5) {
 
         recommendations.push(
             "🏃 Activity: Try adding a short walk or physical activity to your daily routine."
         );
 
+    } else {
+
+        recommendations.push(
+            "🏃 Activity: Good job maintaining some physical activity."
+        );
+
     }
 
 
+    /* Study */
 
-    if (
-        data.study_hours > 10
-    ) {
+    if (data.study_hours > 10) {
 
         recommendations.push(
             "📚 Study: Your study time is high. Schedule regular breaks to avoid burnout."
@@ -312,6 +268,7 @@ function getRecommendations(data) {
     }
 
 
+    /* Stress */
 
     if (
         data.stress_level === "High" ||
@@ -322,6 +279,12 @@ function getRecommendations(data) {
             "🧠 Stress: Your reported stress is elevated. Consider talking with someone you trust."
         );
 
+    } else {
+
+        recommendations.push(
+            "🧠 Stress: Your reported stress level is not in the high range."
+        );
+
     }
 
 
@@ -330,19 +293,24 @@ function getRecommendations(data) {
 }
 
 
-
 /* =========================================
    SHOW RECOMMENDATIONS
 ========================================= */
 
 function showRecommendations(data) {
 
-    const list =
+    const recommendations =
         getRecommendations(data);
 
+    const container =
+        $("recommendations");
 
-    $("recommendations").innerHTML =
-        list
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML =
+        recommendations
             .map(
                 (item) =>
                     `<div class="recommendation">
@@ -352,7 +320,6 @@ function showRecommendations(data) {
             .join("");
 
 }
-
 
 
 /* =========================================
@@ -369,8 +336,7 @@ function saveHistory(data, score) {
         );
 
 
-    const now =
-        new Date();
+    const now = new Date();
 
 
     history.unshift({
@@ -396,17 +362,13 @@ function saveHistory(data, score) {
 
 
     localStorage.setItem(
-
         "mentalHealthHistory",
-
         JSON.stringify(
             history.slice(0, 10)
         )
-
     );
 
 }
-
 
 
 /* =========================================
@@ -426,9 +388,8 @@ function getHistory() {
 }
 
 
-
 /* =========================================
-   HISTORY DISPLAY
+   SHOW HISTORY
 ========================================= */
 
 function showHistory() {
@@ -436,14 +397,16 @@ function showHistory() {
     const list =
         $("history-list");
 
+    if (!list) {
+        return;
+    }
+
 
     const history =
         getHistory();
 
 
-    if (
-        history.length === 0
-    ) {
+    if (history.length === 0) {
 
         list.innerHTML =
             `<p style="color:var(--muted)">
@@ -476,7 +439,6 @@ function showHistory() {
 
                     </span>
 
-
                     <b>
 
                         ${Number(
@@ -494,125 +456,158 @@ function showHistory() {
 }
 
 
-
 /* =========================================
    CHARTS
 ========================================= */
 
-function createCharts(
-    data,
-    score
-) {
+function createCharts(data, score) {
+
+    if (!analytics) {
+        return;
+    }
+
 
     analytics.classList.remove(
         "hidden"
     );
 
 
-    if (
-        lifestyleChart
-    ) {
+    /* Destroy old charts */
+
+    if (lifestyleChart) {
 
         lifestyleChart.destroy();
 
+        lifestyleChart = null;
+
     }
 
 
-    if (
-        historyChart
-    ) {
+    if (historyChart) {
 
         historyChart.destroy();
 
+        historyChart = null;
+
     }
 
 
+    /* Check Chart.js */
 
-    /* Lifestyle Chart */
+    if (typeof Chart === "undefined") {
 
-    lifestyleChart =
-        new Chart(
-            $("lifestyle-chart"),
-            {
+        console.warn(
+            "Chart.js is not loaded."
+        );
 
-                type: "bar",
+        return;
 
-                data: {
+    }
 
-                    labels: [
 
-                        "Sleep",
+    /* =====================================
+       LIFESTYLE CHART
+    ===================================== */
 
-                        "Screen",
+    const lifestyleCanvas =
+        $("lifestyle-chart");
 
-                        "Study",
+    if (lifestyleCanvas) {
 
-                        "Activity"
+        lifestyleChart =
+            new Chart(
+                lifestyleCanvas,
+                {
 
-                    ],
+                    type: "bar",
 
-                    datasets: [
+                    data: {
 
-                        {
+                        labels: [
 
-                            label:
-                                "Hours",
+                            "Sleep",
+                            "Screen",
+                            "Study",
+                            "Activity"
 
-                            data: [
+                        ],
 
-                                data.sleep_hours_per_night,
+                        datasets: [
 
-                                data.avg_daily_usage_hours,
+                            {
 
-                                data.study_hours,
+                                label:
+                                    "Hours",
 
-                                data.physical_activity_hours
+                                data: [
 
-                            ],
+                                    data.sleep_hours_per_night,
 
-                            borderRadius:
-                                8
+                                    data.avg_daily_usage_hours,
 
-                        }
+                                    data.study_hours,
 
-                    ]
+                                    data.physical_activity_hours
 
-                },
+                                ],
 
-                options: {
+                                borderRadius:
+                                    8
 
-                    responsive: true,
+                            }
 
-                    plugins: {
-
-                        legend: {
-
-                            display: false
-
-                        }
+                        ]
 
                     },
 
-                    scales: {
+                    options: {
 
-                        y: {
+                        responsive: true,
 
-                            beginAtZero: true,
+                        plugins: {
 
-                            max: 24
+                            legend: {
+
+                                display:
+                                    false
+
+                            }
+
+                        },
+
+                        scales: {
+
+                            y: {
+
+                                beginAtZero:
+                                    true,
+
+                                max:
+                                    24
+
+                            }
 
                         }
 
                     }
 
                 }
+            );
 
-            }
-        );
+    }
 
 
+    /* =====================================
+       HISTORY CHART
+    ===================================== */
 
-    /* History Chart */
+    const historyCanvas =
+        $("history-chart");
+
+    if (!historyCanvas) {
+        return;
+    }
+
 
     const history =
         getHistory()
@@ -622,7 +617,7 @@ function createCharts(
 
     historyChart =
         new Chart(
-            $("history-chart"),
+            historyCanvas,
             {
 
                 type: "line",
@@ -634,12 +629,11 @@ function createCharts(
                         history.length
 
                             ? history.map(
-                                x =>
-                                    x.shortDate
+                                (item) =>
+                                    item.shortDate
                             )
 
                             : ["Current"],
-
 
                     datasets: [
 
@@ -653,8 +647,8 @@ function createCharts(
                                 history.length
 
                                     ? history.map(
-                                        x =>
-                                            x.score
+                                        (item) =>
+                                            item.score
                                     )
 
                                     : [score],
@@ -673,15 +667,18 @@ function createCharts(
 
                 options: {
 
-                    responsive: true,
+                    responsive:
+                        true,
 
                     scales: {
 
                         y: {
 
-                            min: 0,
+                            min:
+                                0,
 
-                            max: 10
+                            max:
+                                10
 
                         }
 
@@ -695,16 +692,17 @@ function createCharts(
 }
 
 
-
 /* =========================================
    DOWNLOAD REPORT
 ========================================= */
 
 function downloadReport() {
 
-    if (
-        !lastPrediction
-    ) {
+    if (!lastPrediction) {
+
+        alert(
+            "Please make a prediction first."
+        );
 
         return;
 
@@ -780,7 +778,8 @@ AI WELLNESS SUGGESTIONS
 
 ${getRecommendations(data)
     .map(
-        x => "- " + x
+        (x) =>
+            "- " + x
     )
     .join("\n")}
 
@@ -818,13 +817,22 @@ It is not a medical or clinical diagnosis.
         );
 
 
-    link.href = url;
+    link.href =
+        url;
 
     link.download =
         "mental-health-report.txt";
 
 
+    document.body.appendChild(
+        link
+    );
+
     link.click();
+
+    document.body.removeChild(
+        link
+    );
 
 
     URL.revokeObjectURL(
@@ -834,364 +842,519 @@ It is not a medical or clinical diagnosis.
 }
 
 
-
 /* =========================================
    FORM SUBMIT
 ========================================= */
 
-form.addEventListener(
-    "submit",
-    async (event) => {
+if (form) {
+
+    form.addEventListener(
+        "submit",
+        async (event) => {
+
+            event.preventDefault();
 
 
-        event.preventDefault();
+            const data =
+                createPayload();
 
 
-        const data =
-            createPayload();
+            /* HTML validation */
+
+            if (!form.checkValidity()) {
+
+                form.reportValidity();
+
+                return;
+
+            }
 
 
-        /* HTML validation */
+            /* Stress validation */
 
-        if (
-            !form.checkValidity()
-        ) {
+            if (!data.stress_level) {
 
-            form.reportValidity();
+                alert(
+                    "Please select a stress level."
+                );
 
-            return;
+                return;
 
-        }
-
-
-        /* Stress validation */
-
-        if (
-            !data.stress_level
-        ) {
-
-            alert(
-                "Please select a stress level."
-            );
-
-            return;
-
-        }
+            }
 
 
-        /* Loading */
+            /* Disable button */
 
-        submitBtn.disabled =
-            true;
+            if (submitBtn) {
 
+                submitBtn.disabled =
+                    true;
 
-        showState(
-            loading
-        );
-
-
-        try {
+            }
 
 
-            console.log(
-                "Sending:",
-                data
+            /* Loading */
+
+            showState(
+                loading
             );
 
 
-            const response =
-                await fetch(
+            try {
 
-                    `${API_BASE}/predict`,
+                console.log(
+                    "Sending data:",
+                    data
+                );
 
-                    {
 
-                        method:
-                            "POST",
+                console.log(
+                    "API:",
+                    `${API_BASE}/predict`
+                );
 
-                        headers: {
 
-                            "Content-Type":
-                                "application/json"
+                /* =================================
+                   API REQUEST
+                ================================= */
 
-                        },
+                const response =
+                    await fetch(
 
-                        body:
-                            JSON.stringify(
-                                data
-                            )
+                        `${API_BASE}/predict`,
+
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                "Accept":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    data
+                                )
+
+                        }
+
+                    );
+
+
+                /* =================================
+                   READ RESPONSE
+                ================================= */
+
+                let responseData;
+
+
+                try {
+
+                    responseData =
+                        await response.json();
+
+                } catch {
+
+                    throw new Error(
+                        `Server returned invalid response (${response.status}).`
+                    );
+
+                }
+
+
+                console.log(
+                    "API Response:",
+                    responseData
+                );
+
+
+                /* =================================
+                   API ERROR
+                ================================= */
+
+                if (!response.ok) {
+
+                    let message =
+                        `Server Error ${response.status}`;
+
+
+                    if (
+                        responseData &&
+                        responseData.detail
+                    ) {
+
+                        message =
+                            typeof responseData.detail ===
+                            "string"
+
+                                ? responseData.detail
+
+                                : JSON.stringify(
+                                    responseData.detail
+                                );
 
                     }
 
-                );
+
+                    throw new Error(
+                        message
+                    );
+
+                }
 
 
-            const responseData =
-                await response.json();
+                /* =================================
+                   GET SCORE
+                ================================= */
+
+                const score =
+                    Number(
+                        responseData
+                            .predicted_mental_health_score
+                    );
 
 
-            console.log(
-                "API Response:",
-                responseData
-            );
-
-
-            if (
-                !response.ok
-            ) {
-
-                throw new Error(
-
-                    responseData.detail
-
-                        ? JSON.stringify(
-                            responseData.detail
-                        )
-
-                        : `Server Error ${response.status}`
-
-                );
-
-            }
-
-
-            const score =
-                Number(
-                    responseData
-                        .predicted_mental_health_score
-                );
-
-
-            if (
-                !Number.isFinite(
-                    score
-                )
-            ) {
-
-                throw new Error(
-                    "Prediction score missing."
-                );
-
-            }
-
-
-            /* Keep score 0-10 */
-
-            const finalScore =
-                Math.max(
-                    0,
-                    Math.min(
-                        10,
+                if (
+                    !Number.isFinite(
                         score
                     )
-                );
+                ) {
+
+                    throw new Error(
+                        "Prediction score is missing from API response."
+                    );
+
+                }
 
 
-            /* Score */
+                /* =================================
+                   KEEP SCORE 0-10
+                ================================= */
 
-            $("score")
-                .textContent =
-                finalScore.toFixed(
-                    2
-                );
-
-
-            /* Meter */
-
-            $("meter-fill")
-                .style.width =
-                `${finalScore * 10}%`;
+                const finalScore =
+                    Math.max(
+                        0,
+                        Math.min(
+                            10,
+                            score
+                        )
+                    );
 
 
+                /* =================================
+                   SCORE
+                ================================= */
 
-            /* Interpretation */
+                const scoreElement =
+                    $("score");
 
-            if (
-                finalScore < 4
-            ) {
+                if (scoreElement) {
 
-                $("band")
-                    .textContent =
-                    "Signal: Strained";
+                    scoreElement.textContent =
+                        finalScore.toFixed(2);
 
-
-                $("context")
-                    .textContent =
-                    "The model indicates a lower wellness score based on the information provided.";
-
-            }
+                }
 
 
-            else if (
-                finalScore < 7
-            ) {
+                /* =================================
+                   METER
+                ================================= */
 
-                $("band")
-                    .textContent =
-                    "Signal: Balanced";
+                const meterFill =
+                    $("meter-fill");
 
+                if (meterFill) {
 
-                $("context")
-                    .textContent =
-                    "The model indicates a moderate wellness score based on the information provided.";
+                    meterFill.style.width =
+                        `${finalScore * 10}%`;
 
-            }
-
-
-            else {
-
-                $("band")
-                    .textContent =
-                    "Signal: Strong";
+                }
 
 
-                $("context")
-                    .textContent =
-                    "The model indicates a stronger wellness score based on the information provided.";
+                /* =================================
+                   INTERPRETATION
+                ================================= */
 
-            }
+                if (finalScore < 4) {
 
-
-
-            /* Quick Stats */
-
-            $("sleep-stat")
-                .textContent =
-                data.sleep_hours_per_night;
+                    $("band").textContent =
+                        "Signal: Strained";
 
 
-            $("screen-stat")
-                .textContent =
-                data.avg_daily_usage_hours;
+                    $("context").textContent =
+                        "The model indicates a lower wellness score based on the information provided.";
+
+                }
+
+                else if (finalScore < 7) {
+
+                    $("band").textContent =
+                        "Signal: Balanced";
 
 
-            $("activity-stat")
-                .textContent =
-                data.physical_activity_hours;
+                    $("context").textContent =
+                        "The model indicates a moderate wellness score based on the information provided.";
+
+                }
+
+                else {
+
+                    $("band").textContent =
+                        "Signal: Strong";
 
 
-            $("stress-stat")
-                .textContent =
-                data.stress_level;
+                    $("context").textContent =
+                        "The model indicates a stronger wellness score based on the information provided.";
+
+                }
 
 
+                /* =================================
+                   QUICK STATS
+                ================================= */
 
-            /* Insights */
+                const sleepStat =
+                    $("sleep-stat");
 
-            $("insights")
-                .innerHTML =
-                getRecommendations(
-                    data
-                )
-                    .map(
-                        item =>
-                            `<div class="insight">
-                                ${item}
-                            </div>`
-                    )
-                    .join("");
+                if (sleepStat) {
+
+                    sleepStat.textContent =
+                        data.sleep_hours_per_night;
+
+                }
 
 
+                const screenStat =
+                    $("screen-stat");
 
-            /* Save */
+                if (screenStat) {
 
-            saveHistory(
-                data,
-                finalScore
-            );
+                    screenStat.textContent =
+                        data.avg_daily_usage_hours;
+
+                }
 
 
-            /* Store */
+                const activityStat =
+                    $("activity-stat");
 
-            lastPrediction = {
+                if (activityStat) {
 
-                data:
+                    activityStat.textContent =
+                        data.physical_activity_hours;
+
+                }
+
+
+                const stressStat =
+                    $("stress-stat");
+
+                if (stressStat) {
+
+                    stressStat.textContent =
+                        data.stress_level;
+
+                }
+
+
+                /* =================================
+                   INSIGHTS
+                ================================= */
+
+                const insights =
+                    $("insights");
+
+                if (insights) {
+
+                    insights.innerHTML =
+                        getRecommendations(data)
+                            .map(
+                                (item) =>
+                                    `<div class="insight">
+                                        ${item}
+                                    </div>`
+                            )
+                            .join("");
+
+                }
+
+
+                /* =================================
+                   SAVE HISTORY
+                ================================= */
+
+                saveHistory(
                     data,
-
-                score:
                     finalScore
-
-            };
-
+                );
 
 
-            /* Charts */
+                /* =================================
+                   STORE PREDICTION
+                ================================= */
 
-            createCharts(
-                data,
-                finalScore
-            );
+                lastPrediction = {
+
+                    data:
+                        data,
+
+                    score:
+                        finalScore
+
+                };
 
 
-            /* Recommendations */
+                /* =================================
+                   CHARTS
+                ================================= */
 
-            showRecommendations(
-                data
-            );
+                createCharts(
+                    data,
+                    finalScore
+                );
 
 
-            /* Show result */
+                /* =================================
+                   RECOMMENDATIONS
+                ================================= */
 
-            showState(
-                result
-            );
+                showRecommendations(
+                    data
+                );
 
+
+                /* =================================
+                   SHOW RESULT
+                ================================= */
+
+                showState(
+                    result
+                );
+
+
+                /* Scroll result into view */
+
+                if (result) {
+
+                    result.scrollIntoView({
+                        behavior:
+                            "smooth",
+                        block:
+                            "start"
+                    });
+
+                }
+
+
+            }
+
+
+            catch (err) {
+
+                console.error(
+                    "Prediction error:",
+                    err
+                );
+
+
+                const errorTitle =
+                    $("error-title");
+
+                if (errorTitle) {
+
+                    errorTitle.textContent =
+                        "Prediction Failed";
+
+                }
+
+
+                const errorText =
+                    $("error-text");
+
+
+                let message =
+                    err.message ||
+                    "Unable to connect to the prediction server.";
+
+
+                if (
+                    message.includes(
+                        "Failed to fetch"
+                    )
+                ) {
+
+                    message =
+                        "Unable to connect to the backend. Please try again after a few seconds.";
+
+                }
+
+
+                if (errorText) {
+
+                    errorText.textContent =
+                        message;
+
+                }
+
+
+                showState(
+                    error
+                );
+
+            }
+
+
+            finally {
+
+                if (submitBtn) {
+
+                    submitBtn.disabled =
+                        false;
+
+                }
+
+            }
 
         }
+    );
 
-
-        catch (error) {
-
-
-            console.error(
-                error
-            );
-
-
-            $("error-title")
-                .textContent =
-                "Prediction Failed";
-
-
-            $("error-text")
-                .textContent =
-                `${error.message}. Make sure FastAPI is running on port 51079.`;
-
-
-            showState(
-                error
-            );
-
-        }
-
-
-        finally {
-
-            submitBtn.disabled =
-                false;
-
-        }
-
-    }
-);
-
+}
 
 
 /* =========================================
    RESET
 ========================================= */
 
-$("reset-btn")
-    .addEventListener(
+const resetBtn =
+    $("reset-btn");
+
+
+if (resetBtn) {
+
+    resetBtn.addEventListener(
         "click",
         () => {
 
+            if (form) {
 
-            form.reset();
+                form.reset();
+
+            }
 
 
-            stressInput.value =
-                "";
+            if (stressInput) {
+
+                stressInput.value =
+                    "";
+
+            }
 
 
             document
@@ -1199,7 +1362,7 @@ $("reset-btn")
                     "#stress-buttons button"
                 )
                 .forEach(
-                    button => {
+                    (button) => {
 
                         button.classList.remove(
                             "active"
@@ -1209,14 +1372,35 @@ $("reset-btn")
                 );
 
 
-            $("meter-fill")
-                .style.width =
-                "0%";
+            const meterFill =
+                $("meter-fill");
+
+            if (meterFill) {
+
+                meterFill.style.width =
+                    "0%";
+
+            }
 
 
-            $("score")
-                .textContent =
-                "0.00";
+            const score =
+                $("score");
+
+            if (score) {
+
+                score.textContent =
+                    "0.00";
+
+            }
+
+
+            if (analytics) {
+
+                analytics.classList.add(
+                    "hidden"
+                );
+
+            }
 
 
             showState(
@@ -1226,23 +1410,31 @@ $("reset-btn")
 
             window.scrollTo({
 
-                top: 0,
+                top:
+                    0,
 
-                behavior: "smooth"
+                behavior:
+                    "smooth"
 
             });
 
         }
     );
 
+}
 
 
 /* =========================================
    RETRY
 ========================================= */
 
-$("retry-btn")
-    .addEventListener(
+const retryBtn =
+    $("retry-btn");
+
+
+if (retryBtn) {
+
+    retryBtn.addEventListener(
         "click",
         () => {
 
@@ -1253,70 +1445,108 @@ $("retry-btn")
         }
     );
 
+}
 
 
 /* =========================================
-   DOWNLOAD
+   DOWNLOAD REPORT
 ========================================= */
 
-$("report-btn")
-    .addEventListener(
+const reportBtn =
+    $("report-btn");
+
+
+if (reportBtn) {
+
+    reportBtn.addEventListener(
         "click",
         downloadReport
     );
 
+}
 
 
 /* =========================================
    HISTORY
 ========================================= */
 
-$("history-btn")
-    .addEventListener(
+const historyBtn =
+    $("history-btn");
+
+
+if (historyBtn) {
+
+    historyBtn.addEventListener(
         "click",
         () => {
 
+            if (historyPanel) {
 
-            historyPanel
-                .classList
-                .toggle(
-                    "hidden"
-                );
+                historyPanel
+                    .classList
+                    .toggle(
+                        "hidden"
+                    );
 
+                showHistory();
 
-            showHistory();
+                historyPanel
+                    .scrollIntoView({
+                        behavior:
+                            "smooth"
+                    });
 
-
-            historyPanel
-                .scrollIntoView({
-                    behavior:
-                        "smooth"
-                });
+            }
 
         }
     );
 
+}
 
 
-$("history-close")
-    .addEventListener(
+/* =========================================
+   CLOSE HISTORY
+========================================= */
+
+const historyClose =
+    $("history-close");
+
+
+if (historyClose) {
+
+    historyClose.addEventListener(
         "click",
         () => {
 
-            historyPanel
-                .classList
-                .add("hidden");
+            if (historyPanel) {
+
+                historyPanel
+                    .classList
+                    .add(
+                        "hidden"
+                    );
+
+            }
 
         }
     );
 
+}
 
 
-$("history-clear")
-    .addEventListener(
+/* =========================================
+   CLEAR HISTORY
+========================================= */
+
+const historyClear =
+    $("history-clear");
+
+
+if (historyClear) {
+
+    historyClear.addEventListener(
         "click",
         () => {
-
 
             localStorage.removeItem(
                 "mentalHealthHistory"
@@ -1326,21 +1556,23 @@ $("history-clear")
             showHistory();
 
 
-            if (
-                historyChart
-            ) {
+            if (historyChart) {
 
                 historyChart.destroy();
+
+                historyChart =
+                    null;
 
             }
 
         }
     );
 
+}
 
 
 /* =========================================
-   START
+   START APPLICATION
 ========================================= */
 
 showState(
@@ -1349,11 +1581,23 @@ showState(
 
 
 console.log(
+    "================================="
+);
+
+console.log(
     "Mental Health frontend loaded."
 );
 
+console.log(
+    "FastAPI Backend:",
+    API_BASE
+);
 
 console.log(
-    "FastAPI:",
-    API_BASE
+    "Prediction Endpoint:",
+    `${API_BASE}/predict`
+);
+
+console.log(
+    "================================="
 );
