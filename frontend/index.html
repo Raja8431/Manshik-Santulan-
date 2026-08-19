@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Mental Health Signal | AI Wellness Dashboard
+    </title>
+
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- Chart.js -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <!-- CSS -->
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- Background -->
+
+    <div class="bg-glow glow-one"></div>
+
+    <div class="bg-glow glow-two"></div>
+
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="topbar">
+
+
+        <div class="brand">
+
+            <span class="brand-icon">
+                ✦
+            </span>
+
+
+            <div>
+
+                <b>
+                    Mental Health
+                </b>
+
+                <small>
+                    AI Wellness Dashboard
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="top-actions">
+
+
+            <button
+                id="history-btn"
+                class="icon-btn"
+                type="button"
+                title="History">
+
+                ◷
+
+            </button>
+
+
+            <button
+                id="theme-btn"
+                class="icon-btn"
+                type="button"
+                title="Toggle theme">
+
+                ☾
+
+            </button>
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="container">
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+
+            <div class="badge">
+
+                AI-POWERED STUDENT WELLNESS
+
+            </div>
+
+
+            <h1>
+
+                Understand your
+
+                <span>
+                    wellness signal.
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                Analyze your lifestyle and daily habits
+                with a trained Machine Learning model.
+                Get a wellness score, charts and useful insights.
+
+            </p>
+
+
+        </section>
+
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <div class="dashboard">
+
+
+            <!-- ================= FORM ================= -->
+
+            <section class="card form-card">
+
+
+                <div class="card-head">
+
+
+                    <div>
+
+                        <span class="step">
+                            01
+                        </span>
+
+                        <h2>
+                            Your Profile
+                        </h2>
+
+                    </div>
+
+
+                    <span class="required">
+                        All fields required
+                    </span>
+
+
+                </div>
+
+
+
+                <form id="predict-form">
+
+
+                    <!-- PROFILE -->
+
+                    <div class="grid three">
+
+
+                        <label>
+
+                            Age
+
+                            <input
+                                id="age"
+                                type="number"
+                                min="10"
+                                max="100"
+                                placeholder="22"
+                                required>
+
+                        </label>
+
+
+
+                        <label>
+
+                            Gender
+
+                            <select
+                                id="gender"
+                                required>
+
+                                <option value="">
+                                    Select
+                                </option>
+
+                                <option value="Male">
+                                    Male
+                                </option>
+
+                                <option value="Female">
+                                    Female
+                                </option>
+
+                            </select>
+
+                        </label>
+
+
+
+                        <label>
+
+                            Country
+
+                            <input
+                                id="country"
+                                list="countries"
+                                placeholder="India"
+                                required>
+
+
+                            <datalist id="countries">
+
+                                <option value="India">
+                                <option value="USA">
+                                <option value="Canada">
+                                <option value="Australia">
+                                <option value="UK">
+                                <option value="Germany">
+                                <option value="Mexico">
+                                <option value="Turkey">
+                                <option value="France">
+
+                            </datalist>
+
+                        </label>
+
+
+                    </div>
+
+
+
+                    <!-- SECTION 02 -->
+
+                    <div class="section-title">
+
+
+                        <span class="step">
+                            02
+                        </span>
+
+
+                        <h2>
+                            Academic & Digital Habits
+                        </h2>
+
+
+                    </div>
+
+
+
+                    <div class="grid two">
+
+
+                        <label>
+
+                            Academic Level
+
+                            <select
+                                id="academic_level"
+                                required>
+
+                                <option value="">
+                                    Select
+                                </option>
+
+                                <option>
+                                    High School
+                                </option>
+
+                                <option>
+                                    Undergraduate
+                                </option>
+
+                                <option>
+                                    Graduate
+                                </option>
+
+                            </select>
+
+                        </label>
+
+
+
+                        <label>
+
+                            Most-used Platform
+
+                            <select
+                                id="most_used_platform"
+                                required>
+
+                                <option value="">
+                                    Select
+                                </option>
+
+                                <option>Facebook</option>
+                                <option>LinkedIn</option>
+                                <option>Instagram</option>
+                                <option>Snapchat</option>
+                                <option>Twitter</option>
+                                <option>YouTube</option>
+                                <option>TikTok</option>
+                                <option>LINE</option>
+                                <option>KakaoTalk</option>
+                                <option>VKontakte</option>
+                                <option>WhatsApp</option>
+                                <option>WeChat</option>
+
+                            </select>
+
+                        </label>
+
+
+
+                        <label>
+
+                            Primary Purpose
+
+                            <select
+                                id="purpose_of_use"
+                                required>
+
+                                <option value="">
+                                    Select
+                                </option>
+
+                                <option>
+                                    Networking
+                                </option>
+
+                                <option>
+                                    Education
+                                </option>
+
+                                <option>
+                                    Entertainment
+                                </option>
+
+                                <option>
+                                    News
+                                </option>
+
+                            </select>
+
+                        </label>
+
+
+
+                        <label>
+
+                            Daily Screen Time
+
+                            <i>
+                                hours
+                            </i>
+
+                            <input
+                                id="avg_daily_usage_hours"
+                                type="number"
+                                min="0"
+                                max="24"
+                                step="0.1"
+                                placeholder="4.5"
+                                required>
+
+                        </label>
+
+
+
+                        <label>
+
+                            Daily Phone Unlocks
+
+                            <input
+                                id="daily_unlocks"
+                                type="number"
+                                min="0"
+                                placeholder="60"
+                                required>
+
+                        </label>
+
+
+                    </div>
+
+
+
+                    <!-- SECTION 03 -->
+
+                    <div class="section-title">
+
+                        <span class="step">
+                            03
+                        </span>
+
+                        <h2>
+                            Lifestyle & Stress
+                        </h2>
+
+                    </div>
+
+
+
+                    <div class="grid three">
+
+
+                        <label>
+
+                            Study Hours / Day
+
+                            <i>
+                                hours
+                            </i>
+
+                            <input
+                                id="study_hours"
+                                type="number"
+                                min="0"
+                                max="24"
+                                step="0.1"
+                                placeholder="5"
+                                required>
+
+                        </label>
+
+
+
+                        <label>
+
+                            Physical Activity
+
+                            <i>
+                                hours
+                            </i>
+
+                            <input
+                                id="physical_activity_hours"
+                                type="number"
+                                min="0"
+                                max="24"
+                                step="0.1"
+                                placeholder="1"
+                                required>
+
+                        </label>
+
+
+
+                        <label>
+
+                            Sleep / Night
+
+                            <i>
+                                hours
+                            </i>
+
+                            <input
+                                id="sleep_hours_per_night"
+                                type="number"
+                                min="0"
+                                max="24"
+                                step="0.1"
+                                placeholder="7"
+                                required>
+
+                        </label>
+
+
+                    </div>
+
+
+
+                    <!-- STRESS -->
+
+                    <div class="stress-box">
+
+
+                        <div>
+
+                            <b>
+                                Perceived Stress Level
+                            </b>
+
+                            <small>
+                                Select the option that best describes you.
+                            </small>
+
+                        </div>
+
+
+
+                        <div
+                            class="stress-buttons"
+                            id="stress-buttons">
+
+
+                            <button
+                                type="button"
+                                data-value="Low">
+
+                                Low
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                data-value="Medium">
+
+                                Medium
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                data-value="High">
+
+                                High
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                data-value="Very High">
+
+                                Very High
+
+                            </button>
+
+
+                        </div>
+
+
+                        <input
+                            id="stress_level"
+                            type="hidden">
+
+
+                    </div>
+
+
+
+                    <!-- SUBMIT -->
+
+                    <button
+                        class="analyze-btn"
+                        id="submit-btn"
+                        type="submit">
+
+                        <span>
+                            Analyze My Signal
+                        </span>
+
+                        <strong>
+                            →
+                        </strong>
+
+                    </button>
+
+
+                </form>
+
+
+            </section>
+
+
+
+            <!-- ================= RESULT ================= -->
+
+            <aside class="card result-card">
+
+
+                <!-- IDLE -->
+
+                <div
+                    id="idle-state"
+                    class="result-state">
+
+
+                    <div class="orb">
+                        ✦
+                    </div>
+
+
+                    <span class="mini-label">
+                        YOUR RESULT
+                    </span>
+
+
+                    <h2>
+                        Ready when you are.
+                    </h2>
+
+
+                    <p>
+
+                        Complete the form and we'll calculate
+                        your predicted wellness signal.
+
+                    </p>
+
+
+
+                    <div class="tips">
+
+
+                        <div>
+
+                            01
+
+                            <span>
+                                Complete your daily habits
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            02
+
+                            <span>
+                                Submit for analysis
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            03
+
+                            <span>
+                                Review your score
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- LOADING -->
+
+                <div
+                    id="loading-state"
+                    class="result-state hidden">
+
+
+                    <div class="loader">
+                    </div>
+
+
+                    <span class="mini-label">
+                        ANALYZING
+                    </span>
+
+
+                    <h2>
+                        Reading your signal…
+                    </h2>
+
+
+                    <p>
+                        Running your inputs through the ML model.
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- RESULT -->
+
+                <div
+                    id="result-state"
+                    class="result-state hidden">
+
+
+                    <span class="mini-label">
+                        PREDICTED WELLNESS SCORE
+                    </span>
+
+
+                    <div class="score-wrap">
+
+                        <span id="score">
+                            0.00
+                        </span>
+
+                        <small>
+                            /10
+                        </small>
+
+                    </div>
+
+
+
+                    <div class="meter">
+
+                        <div
+                            id="meter-fill">
+                        </div>
+
+                    </div>
+
+
+
+                    <div
+                        id="band"
+                        class="band">
+
+                        —
+
+                    </div>
+
+
+
+                    <p id="context">
+                    </p>
+
+
+
+                    <!-- QUICK STATS -->
+
+                    <div class="quick-stats">
+
+
+                        <div>
+
+                            <b id="sleep-stat">
+                                0
+                            </b>
+
+                            <span>
+                                Sleep h
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <b id="screen-stat">
+                                0
+                            </b>
+
+                            <span>
+                                Screen h
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <b id="activity-stat">
+                                0
+                            </b>
+
+                            <span>
+                                Activity h
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <b id="stress-stat">
+                                —
+                            </b>
+
+                            <span>
+                                Stress
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- INSIGHTS -->
+
+                    <div
+                        class="insights"
+                        id="insights">
+
+                    </div>
+
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="result-actions">
+
+
+                        <button
+                            id="report-btn"
+                            class="primary-small"
+                            type="button">
+
+                            ↓ Download Report
+
+                        </button>
+
+
+                        <button
+                            id="reset-btn"
+                            class="secondary-btn"
+                            type="button">
+
+                            ↻ Analyze Another
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ERROR -->
+
+                <div
+                    id="error-state"
+                    class="result-state hidden">
+
+
+                    <div class="error-orb">
+                        !
+                    </div>
+
+
+                    <span class="mini-label">
+                        REQUEST ERROR
+                    </span>
+
+
+                    <h2 id="error-title">
+                        Couldn't connect
+                    </h2>
+
+
+                    <p id="error-text">
+                    </p>
+
+
+                    <button
+                        id="retry-btn"
+                        class="secondary-btn"
+                        type="button">
+
+                        Try Again
+
+                    </button>
+
+
+                </div>
+
+
+            </aside>
+
+
+        </div>
+
+
+
+        <!-- ================= ANALYTICS ================= -->
+
+        <section
+            id="analytics"
+            class="analytics hidden">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <span class="mini-label">
+                        AFTER ANALYSIS
+                    </span>
+
+                    <h2>
+                        Your Wellness Dashboard
+                    </h2>
+
+                </div>
+
+
+                <button
+                    id="history-clear"
+                    class="secondary-btn">
+
+                    Clear History
+
+                </button>
+
+
+            </div>
+
+
+
+            <div class="analytics-grid">
+
+
+                <div class="card chart-card">
+
+                    <h3>
+                        Lifestyle Profile
+                    </h3>
+
+                    <canvas
+                        id="lifestyle-chart">
+                    </canvas>
+
+                </div>
+
+
+
+                <div class="card chart-card">
+
+                    <h3>
+                        Score History
+                    </h3>
+
+                    <canvas
+                        id="history-chart">
+                    </canvas>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- RECOMMENDATIONS -->
+
+            <div class="card recommendations">
+
+
+                <h3>
+                    AI Wellness Suggestions
+                </h3>
+
+
+                <div id="recommendations">
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================= HISTORY ================= -->
+
+        <section
+            id="history-panel"
+            class="card history-panel hidden">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <span class="mini-label">
+                        LOCAL HISTORY
+                    </span>
+
+                    <h2>
+                        Previous Predictions
+                    </h2>
+
+                </div>
+
+
+                <button
+                    id="history-close"
+                    class="secondary-btn">
+
+                    Close
+
+                </button>
+
+
+            </div>
+
+
+            <div id="history-list">
+            </div>
+
+
+        </section>
+
+
+
+        <!-- DISCLAIMER -->
+
+        <p class="disclaimer">
+
+            ⚠ This tool is for educational and informational
+            purposes only. It is not a medical or clinical assessment.
+
+        </p>
+
+
+    </main>
+
+
+
+    <!-- JavaScript -->
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
