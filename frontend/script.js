@@ -1,6 +1,7 @@
 "use strict";
+
 /* =========================================
-   FASTAPI BACKEND - RENDER
+   FASTAPI BACKEND
 ========================================= */
 
 const API_BASE =
@@ -31,8 +32,27 @@ const historyPanel = $("history-panel");
 
 const stressInput = $("stress_level");
 
+/* Stress Result Elements */
+
+const stressScoreElement =
+    $("stress-score");
+
+const stressLabelElement =
+    $("stress-result-label");
+
+const stressProgressFill =
+    $("stress-progress-fill");
+
+const stressReasonsList =
+    $("stress-reasons-list");
+
+const stressActionsList =
+    $("stress-actions-list");
+
+
 let lifestyleChart = null;
 let historyChart = null;
+
 let lastPrediction = null;
 
 
@@ -42,17 +62,19 @@ let lastPrediction = null;
 
 function showState(state) {
 
-    [idle, loading, result, error].forEach((element) => {
+    [idle, loading, result, error]
+        .forEach((element) => {
 
-        if (element) {
-            element.classList.add("hidden");
-        }
+            if (element) {
+                element.classList.add("hidden");
+            }
 
-    });
+        });
 
     if (state) {
         state.classList.remove("hidden");
     }
+
 }
 
 
@@ -65,8 +87,14 @@ function getValue(id) {
     const element = $(id);
 
     if (!element) {
-        console.error(`Element not found: ${id}`);
+
+        console.error(
+            "Element not found:",
+            id
+        );
+
         return "";
+
     }
 
     return element.value;
@@ -78,20 +106,27 @@ function getValue(id) {
    THEME
 ========================================= */
 
-const themeBtn = $("theme-btn");
+const themeBtn =
+    $("theme-btn");
+
 
 if (themeBtn) {
 
-    themeBtn.addEventListener("click", () => {
+    themeBtn.addEventListener(
+        "click",
+        () => {
 
-        document.body.classList.toggle("light");
+            document.body
+                .classList
+                .toggle("light");
 
-        themeBtn.textContent =
-            document.body.classList.contains("light")
-                ? "☀"
-                : "☾";
+            themeBtn.textContent =
+                document.body.classList.contains("light")
+                    ? "☀"
+                    : "☾";
 
-    });
+        }
+    );
 
 }
 
@@ -101,27 +136,40 @@ if (themeBtn) {
 ========================================= */
 
 document
-    .querySelectorAll("#stress-buttons button")
+    .querySelectorAll(
+        "#stress-buttons button"
+    )
     .forEach((button) => {
 
-        button.addEventListener("click", () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-            document
-                .querySelectorAll("#stress-buttons button")
-                .forEach((btn) => {
+                document
+                    .querySelectorAll(
+                        "#stress-buttons button"
+                    )
+                    .forEach((btn) => {
 
-                    btn.classList.remove("active");
+                        btn.classList.remove(
+                            "active"
+                        );
 
-                });
+                    });
 
-            button.classList.add("active");
+                button.classList.add(
+                    "active"
+                );
 
-            if (stressInput) {
-                stressInput.value =
-                    button.dataset.value;
+                if (stressInput) {
+
+                    stressInput.value =
+                        button.dataset.value;
+
+                }
+
             }
-
-        });
+        );
 
     });
 
@@ -190,9 +238,461 @@ function createPayload() {
             ),
 
         stress_level:
-            getValue("stress_level")
+            getValue(
+                "stress_level"
+            )
 
     };
+
+}
+
+
+/* =========================================
+   STRESS SCORE CALCULATION
+========================================= */
+
+/*
+   Educational lifestyle-based
+   stress signal.
+
+   Score:
+   0 - 24   = Low Stress
+   25 - 49  = Mild Stress
+   50 - 74  = Moderate Stress
+   75 - 100 = High Stress
+
+   NOT a medical diagnosis.
+*/
+
+function calculateStressScore(data) {
+
+    let score = 20;
+
+    const reasons = [];
+
+    const actions = [];
+
+
+    /* =====================================
+       SELF REPORTED STRESS
+    ===================================== */
+
+    const stressPoints = {
+
+        "Low": 5,
+
+        "Medium": 25,
+
+        "High": 55,
+
+        "Very High": 80
+
+    };
+
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            stressPoints,
+            data.stress_level
+        )
+    ) {
+
+        score +=
+            stressPoints[
+                data.stress_level
+            ] * 0.55;
+
+    }
+
+
+    /* =====================================
+       SLEEP
+    ===================================== */
+
+    if (
+        data.sleep_hours_per_night > 0
+    ) {
+
+        if (
+            data.sleep_hours_per_night < 6
+        ) {
+
+            score += 15;
+
+            reasons.push(
+                "Sleep duration is below 6 hours."
+            );
+
+            actions.push(
+                "😴 Try to maintain a regular sleep schedule and allow enough time for sleep."
+            );
+
+        }
+
+        else if (
+            data.sleep_hours_per_night < 7
+        ) {
+
+            score += 7;
+
+            reasons.push(
+                "Sleep duration is slightly below the usual 7–9 hour range."
+            );
+
+            actions.push(
+                "😴 Consider gradually increasing your nightly sleep time."
+            );
+
+        }
+
+        else if (
+            data.sleep_hours_per_night <= 9
+        ) {
+
+            score -= 5;
+
+        }
+
+    }
+
+
+    /* =====================================
+       SCREEN TIME
+    ===================================== */
+
+    if (
+        data.avg_daily_usage_hours > 8
+    ) {
+
+        score += 12;
+
+        reasons.push(
+            "Daily screen usage is quite high."
+        );
+
+        actions.push(
+            "📱 Reduce unnecessary screen time and take regular screen breaks."
+        );
+
+    }
+
+    else if (
+        data.avg_daily_usage_hours > 6
+    ) {
+
+        score += 7;
+
+        reasons.push(
+            "Daily screen usage is relatively high."
+        );
+
+        actions.push(
+            "📱 Add short screen-free periods during the day."
+        );
+
+    }
+
+
+    /* =====================================
+       PHONE UNLOCKS
+    ===================================== */
+
+    if (
+        data.daily_unlocks > 120
+    ) {
+
+        score += 8;
+
+        reasons.push(
+            "Phone checking frequency is high."
+        );
+
+        actions.push(
+            "📵 Try notification limits or scheduled phone-free periods."
+        );
+
+    }
+
+    else if (
+        data.daily_unlocks > 80
+    ) {
+
+        score += 4;
+
+        reasons.push(
+            "Phone checking frequency is relatively high."
+        );
+
+        actions.push(
+            "📵 Avoid checking your phone during focused study sessions."
+        );
+
+    }
+
+
+    /* =====================================
+       STUDY HOURS
+    ===================================== */
+
+    if (
+        data.study_hours > 9
+    ) {
+
+        score += 10;
+
+        reasons.push(
+            "Study workload is very high."
+        );
+
+        actions.push(
+            "📚 Break long study sessions into focused blocks with short breaks."
+        );
+
+    }
+
+    else if (
+        data.study_hours > 7
+    ) {
+
+        score += 5;
+
+        reasons.push(
+            "Study workload is relatively high."
+        );
+
+        actions.push(
+            "📚 Plan realistic study blocks and include recovery breaks."
+        );
+
+    }
+
+
+    /* =====================================
+       PHYSICAL ACTIVITY
+    ===================================== */
+
+    if (
+        data.physical_activity_hours < 0.5
+    ) {
+
+        score += 8;
+
+        reasons.push(
+            "Physical activity is quite low."
+        );
+
+        actions.push(
+            "🏃 Add a short walk, stretching, or another enjoyable physical activity."
+        );
+
+    }
+
+    else if (
+        data.physical_activity_hours < 1
+    ) {
+
+        score += 3;
+
+        reasons.push(
+            "Physical activity is limited."
+        );
+
+        actions.push(
+            "🏃 Consider adding a little more movement to your day."
+        );
+
+    }
+
+    else {
+
+        score -= 4;
+
+    }
+
+
+    /* =====================================
+       FINAL SCORE
+    ===================================== */
+
+    score = Math.round(
+        Math.max(
+            0,
+            Math.min(
+                100,
+                score
+            )
+        )
+    );
+
+
+    /* =====================================
+       STRESS LABEL
+    ===================================== */
+
+    let label =
+        "Low Stress";
+
+
+    if (
+        score >= 75
+    ) {
+
+        label =
+            "High Stress";
+
+    }
+
+    else if (
+        score >= 50
+    ) {
+
+        label =
+            "Moderate Stress";
+
+    }
+
+    else if (
+        score >= 25
+    ) {
+
+        label =
+            "Mild Stress";
+
+    }
+
+
+    /* =====================================
+       DEFAULT REASONS
+    ===================================== */
+
+    if (
+        reasons.length === 0
+    ) {
+
+        reasons.push(
+            "Your selected lifestyle inputs do not show a major stress-related signal."
+        );
+
+    }
+
+
+    /* =====================================
+       DEFAULT ACTIONS
+    ===================================== */
+
+    if (
+        actions.length === 0
+    ) {
+
+        actions.push(
+            "🌿 Continue your healthy routines and keep checking in with your wellbeing."
+        );
+
+        actions.push(
+            "🧘 Maintain regular sleep, movement, study breaks and relaxation time."
+        );
+
+    }
+
+
+    return {
+
+        score,
+
+        label,
+
+        reasons,
+
+        actions
+
+    };
+
+}
+
+
+/* =========================================
+   SHOW STRESS ASSESSMENT
+========================================= */
+
+function showStressAssessment(data) {
+
+    const assessment =
+        calculateStressScore(
+            data
+        );
+
+
+    /* Score */
+
+    if (
+        stressScoreElement
+    ) {
+
+        stressScoreElement.textContent =
+            assessment.score;
+
+    }
+
+
+    /* Label */
+
+    if (
+        stressLabelElement
+    ) {
+
+        stressLabelElement.textContent =
+            assessment.label;
+
+    }
+
+
+    /* Progress */
+
+    if (
+        stressProgressFill
+    ) {
+
+        stressProgressFill.style.width =
+            assessment.score + "%";
+
+    }
+
+
+    /* Reasons */
+
+    if (
+        stressReasonsList
+    ) {
+
+        stressReasonsList.innerHTML =
+            assessment.reasons
+                .map(
+                    (item) =>
+                        `<li>${item}</li>`
+                )
+                .join("");
+
+    }
+
+
+    /* Actions */
+
+    if (
+        stressActionsList
+    ) {
+
+        stressActionsList.innerHTML =
+            assessment.actions
+                .map(
+                    (item) =>
+                        `<li>${item}</li>`
+                )
+                .join("");
+
+    }
+
+
+    return assessment;
 
 }
 
@@ -208,30 +708,48 @@ function getRecommendations(data) {
 
     /* Sleep */
 
-    if (data.sleep_hours_per_night < 6) {
+    if (
+        data.sleep_hours_per_night < 6
+    ) {
 
         recommendations.push(
-            "😴 Sleep: Your sleep is below 6 hours. Try to build a consistent sleep routine."
+            "😴 Sleep: Your sleep is below 6 hours. Try to maintain a consistent sleep routine."
         );
 
-    } else {
+    }
+
+    else if (
+        data.sleep_hours_per_night < 7
+    ) {
 
         recommendations.push(
-            "😴 Sleep: Your reported sleep duration looks reasonable."
+            "😴 Sleep: Your sleep duration is slightly low. Consider gradually increasing your nightly sleep time."
+        );
+
+    }
+
+    else {
+
+        recommendations.push(
+            "😴 Sleep: Your reported sleep duration is within a reasonable range."
         );
 
     }
 
 
-    /* Screen Time */
+    /* Screen */
 
-    if (data.avg_daily_usage_hours > 8) {
+    if (
+        data.avg_daily_usage_hours > 8
+    ) {
 
         recommendations.push(
-            "📱 Screen Time: Consider reducing long screen sessions and taking digital breaks."
+            "📱 Screen Time: Your daily screen usage is high. Take regular screen-free breaks."
         );
 
-    } else {
+    }
+
+    else {
 
         recommendations.push(
             "📱 Screen Time: Keep taking regular breaks during long digital sessions."
@@ -240,18 +758,22 @@ function getRecommendations(data) {
     }
 
 
-    /* Physical Activity */
+    /* Activity */
 
-    if (data.physical_activity_hours < 0.5) {
+    if (
+        data.physical_activity_hours < 0.5
+    ) {
 
         recommendations.push(
             "🏃 Activity: Try adding a short walk or physical activity to your daily routine."
         );
 
-    } else {
+    }
+
+    else {
 
         recommendations.push(
-            "🏃 Activity: Good job maintaining some physical activity."
+            "🏃 Activity: Good job maintaining physical activity."
         );
 
     }
@@ -259,10 +781,12 @@ function getRecommendations(data) {
 
     /* Study */
 
-    if (data.study_hours > 10) {
+    if (
+        data.study_hours > 10
+    ) {
 
         recommendations.push(
-            "📚 Study: Your study time is high. Schedule regular breaks to avoid burnout."
+            "📚 Study: Your study time is high. Schedule regular breaks to avoid overload."
         );
 
     }
@@ -276,10 +800,12 @@ function getRecommendations(data) {
     ) {
 
         recommendations.push(
-            "🧠 Stress: Your reported stress is elevated. Consider talking with someone you trust."
+            "🧠 Stress: Your reported stress is elevated. Consider relaxation techniques and talking with someone you trust."
         );
 
-    } else {
+    }
+
+    else {
 
         recommendations.push(
             "🧠 Stress: Your reported stress level is not in the high range."
@@ -300,14 +826,19 @@ function getRecommendations(data) {
 function showRecommendations(data) {
 
     const recommendations =
-        getRecommendations(data);
+        getRecommendations(
+            data
+        );
+
 
     const container =
         $("recommendations");
 
+
     if (!container) {
         return;
     }
+
 
     container.innerHTML =
         recommendations
@@ -326,7 +857,10 @@ function showRecommendations(data) {
    SAVE HISTORY
 ========================================= */
 
-function saveHistory(data, score) {
+function saveHistory(
+    data,
+    score
+) {
 
     const history =
         JSON.parse(
@@ -336,36 +870,64 @@ function saveHistory(data, score) {
         );
 
 
-    const now = new Date();
+    const stressAssessment =
+        calculateStressScore(
+            data
+        );
+
+
+    const now =
+        new Date();
 
 
     history.unshift({
 
-        score: score,
+        score:
+
+            score,
+
+        stressScore:
+
+            stressAssessment.score,
+
+        stressLabel:
+
+            stressAssessment.label,
 
         stress:
+
             data.stress_level,
 
         sleep:
+
             data.sleep_hours_per_night,
 
         screen:
+
             data.avg_daily_usage_hours,
 
         date:
+
             now.toLocaleString(),
 
         shortDate:
+
             now.toLocaleDateString()
 
     });
 
 
     localStorage.setItem(
+
         "mentalHealthHistory",
+
         JSON.stringify(
-            history.slice(0, 10)
+            history.slice(
+                0,
+                10
+            )
         )
+
     );
 
 }
@@ -397,6 +959,7 @@ function showHistory() {
     const list =
         $("history-list");
 
+
     if (!list) {
         return;
     }
@@ -406,7 +969,9 @@ function showHistory() {
         getHistory();
 
 
-    if (history.length === 0) {
+    if (
+        history.length === 0
+    ) {
 
         list.innerHTML =
             `<p style="color:var(--muted)">
@@ -431,9 +996,12 @@ function showHistory() {
 
                         <br>
 
-                        ${item.stress}
+                        Stress:
+                        ${item.stressLabel || item.stress}
+
                         ·
                         ${item.sleep}h sleep
+
                         ·
                         ${item.screen}h screen
 
@@ -444,6 +1012,13 @@ function showHistory() {
                         ${Number(
                             item.score
                         ).toFixed(2)}/10
+
+                        <br>
+
+                        <small>
+                            Stress:
+                            ${item.stressScore ?? "—"}/100
+                        </small>
 
                     </b>
 
@@ -460,7 +1035,10 @@ function showHistory() {
    CHARTS
 ========================================= */
 
-function createCharts(data, score) {
+function createCharts(
+    data,
+    score
+) {
 
     if (!analytics) {
         return;
@@ -471,8 +1049,6 @@ function createCharts(data, score) {
         "hidden"
     );
 
-
-    /* Destroy old charts */
 
     if (lifestyleChart) {
 
@@ -492,9 +1068,10 @@ function createCharts(data, score) {
     }
 
 
-    /* Check Chart.js */
-
-    if (typeof Chart === "undefined") {
+    if (
+        typeof Chart ===
+        "undefined"
+    ) {
 
         console.warn(
             "Chart.js is not loaded."
@@ -512,22 +1089,29 @@ function createCharts(data, score) {
     const lifestyleCanvas =
         $("lifestyle-chart");
 
-    if (lifestyleCanvas) {
+
+    if (
+        lifestyleCanvas
+    ) {
 
         lifestyleChart =
             new Chart(
                 lifestyleCanvas,
                 {
 
-                    type: "bar",
+                    type:
+                        "bar",
 
                     data: {
 
                         labels: [
 
                             "Sleep",
+
                             "Screen",
+
                             "Study",
+
                             "Activity"
 
                         ],
@@ -562,7 +1146,8 @@ function createCharts(data, score) {
 
                     options: {
 
-                        responsive: true,
+                        responsive:
+                            true,
 
                         plugins: {
 
@@ -604,7 +1189,10 @@ function createCharts(data, score) {
     const historyCanvas =
         $("history-chart");
 
-    if (!historyCanvas) {
+
+    if (
+        !historyCanvas
+    ) {
         return;
     }
 
@@ -620,7 +1208,8 @@ function createCharts(data, score) {
             historyCanvas,
             {
 
-                type: "line",
+                type:
+                    "line",
 
                 data: {
 
@@ -633,7 +1222,9 @@ function createCharts(data, score) {
                                     item.shortDate
                             )
 
-                            : ["Current"],
+                            : [
+                                "Current"
+                            ],
 
                     datasets: [
 
@@ -651,7 +1242,9 @@ function createCharts(data, score) {
                                             item.score
                                     )
 
-                                    : [score],
+                                    : [
+                                        score
+                                    ],
 
                             tension:
                                 0.35,
@@ -698,7 +1291,9 @@ function createCharts(data, score) {
 
 function downloadReport() {
 
-    if (!lastPrediction) {
+    if (
+        !lastPrediction
+    ) {
 
         alert(
             "Please make a prediction first."
@@ -712,8 +1307,15 @@ function downloadReport() {
     const data =
         lastPrediction.data;
 
+
     const score =
         lastPrediction.score;
+
+
+    const stressAssessment =
+        calculateStressScore(
+            data
+        );
 
 
     const report = `
@@ -725,8 +1327,43 @@ Predicted Wellness Score:
 ${Number(score).toFixed(2)} / 10
 
 
+STRESS ASSESSMENT
+=================
+
+Self-Reported Stress:
+${data.stress_level}
+
+Stress Score:
+${stressAssessment.score} / 100
+
+Stress Level:
+${stressAssessment.label}
+
+
+POSSIBLE STRESS FACTORS
+=======================
+
+${stressAssessment.reasons
+    .map(
+        (x) =>
+            "- " + x
+    )
+    .join("\n")}
+
+
+STRESS REDUCTION STEPS
+======================
+
+${stressAssessment.actions
+    .map(
+        (x) =>
+            "- " + x
+    )
+    .join("\n")}
+
+
 PROFILE
--------
+=======
 
 Age:
 ${data.age}
@@ -742,7 +1379,7 @@ ${data.academic_level}
 
 
 DIGITAL HABITS
---------------
+==============
 
 Platform:
 ${data.most_used_platform}
@@ -758,7 +1395,7 @@ ${data.daily_unlocks}
 
 
 LIFESTYLE
----------
+=========
 
 Study:
 ${data.study_hours} hours
@@ -769,12 +1406,9 @@ ${data.physical_activity_hours} hours
 Sleep:
 ${data.sleep_hours_per_night} hours
 
-Stress:
-${data.stress_level}
-
 
 AI WELLNESS SUGGESTIONS
------------------------
+=======================
 
 ${getRecommendations(data)
     .map(
@@ -785,7 +1419,7 @@ ${getRecommendations(data)
 
 
 DISCLAIMER
-----------
+==========
 
 This tool is for educational and
 informational purposes only.
@@ -820,6 +1454,7 @@ It is not a medical or clinical diagnosis.
     link.href =
         url;
 
+
     link.download =
         "mental-health-report.txt";
 
@@ -828,7 +1463,9 @@ It is not a medical or clinical diagnosis.
         link
     );
 
+
     link.click();
+
 
     document.body.removeChild(
         link
@@ -859,9 +1496,11 @@ if (form) {
                 createPayload();
 
 
-            /* HTML validation */
+            /* HTML Validation */
 
-            if (!form.checkValidity()) {
+            if (
+                !form.checkValidity()
+            ) {
 
                 form.reportValidity();
 
@@ -870,9 +1509,11 @@ if (form) {
             }
 
 
-            /* Stress validation */
+            /* Stress Validation */
 
-            if (!data.stress_level) {
+            if (
+                !data.stress_level
+            ) {
 
                 alert(
                     "Please select a stress level."
@@ -883,7 +1524,7 @@ if (form) {
             }
 
 
-            /* Disable button */
+            /* Disable */
 
             if (submitBtn) {
 
@@ -949,7 +1590,7 @@ if (form) {
 
 
                 /* =================================
-                   READ RESPONSE
+                   RESPONSE
                 ================================= */
 
                 let responseData;
@@ -960,7 +1601,9 @@ if (form) {
                     responseData =
                         await response.json();
 
-                } catch {
+                }
+
+                catch {
 
                     throw new Error(
                         `Server returned invalid response (${response.status}).`
@@ -979,7 +1622,9 @@ if (form) {
                    API ERROR
                 ================================= */
 
-                if (!response.ok) {
+                if (
+                    !response.ok
+                ) {
 
                     let message =
                         `Server Error ${response.status}`;
@@ -1011,7 +1656,7 @@ if (form) {
 
 
                 /* =================================
-                   GET SCORE
+                   GET WELLNESS SCORE
                 ================================= */
 
                 const score =
@@ -1049,13 +1694,26 @@ if (form) {
 
 
                 /* =================================
-                   SCORE
+                   STRESS ASSESSMENT
+                ================================= */
+
+                const stressAssessment =
+                    showStressAssessment(
+                        data
+                    );
+
+
+                /* =================================
+                   WELLNESS SCORE
                 ================================= */
 
                 const scoreElement =
                     $("score");
 
-                if (scoreElement) {
+
+                if (
+                    scoreElement
+                ) {
 
                     scoreElement.textContent =
                         finalScore.toFixed(2);
@@ -1064,13 +1722,16 @@ if (form) {
 
 
                 /* =================================
-                   METER
+                   WELLNESS METER
                 ================================= */
 
                 const meterFill =
                     $("meter-fill");
 
-                if (meterFill) {
+
+                if (
+                    meterFill
+                ) {
 
                     meterFill.style.width =
                         `${finalScore * 10}%`;
@@ -1082,7 +1743,9 @@ if (form) {
                    INTERPRETATION
                 ================================= */
 
-                if (finalScore < 4) {
+                if (
+                    finalScore < 4
+                ) {
 
                     $("band").textContent =
                         "Signal: Strained";
@@ -1093,7 +1756,9 @@ if (form) {
 
                 }
 
-                else if (finalScore < 7) {
+                else if (
+                    finalScore < 7
+                ) {
 
                     $("band").textContent =
                         "Signal: Balanced";
@@ -1123,7 +1788,10 @@ if (form) {
                 const sleepStat =
                     $("sleep-stat");
 
-                if (sleepStat) {
+
+                if (
+                    sleepStat
+                ) {
 
                     sleepStat.textContent =
                         data.sleep_hours_per_night;
@@ -1134,7 +1802,10 @@ if (form) {
                 const screenStat =
                     $("screen-stat");
 
-                if (screenStat) {
+
+                if (
+                    screenStat
+                ) {
 
                     screenStat.textContent =
                         data.avg_daily_usage_hours;
@@ -1145,7 +1816,10 @@ if (form) {
                 const activityStat =
                     $("activity-stat");
 
-                if (activityStat) {
+
+                if (
+                    activityStat
+                ) {
 
                     activityStat.textContent =
                         data.physical_activity_hours;
@@ -1156,10 +1830,13 @@ if (form) {
                 const stressStat =
                     $("stress-stat");
 
-                if (stressStat) {
+
+                if (
+                    stressStat
+                ) {
 
                     stressStat.textContent =
-                        data.stress_level;
+                        stressAssessment.label;
 
                 }
 
@@ -1171,17 +1848,22 @@ if (form) {
                 const insights =
                     $("insights");
 
-                if (insights) {
+
+                if (
+                    insights
+                ) {
 
                     insights.innerHTML =
-                        getRecommendations(data)
-                            .map(
-                                (item) =>
-                                    `<div class="insight">
-                                        ${item}
-                                    </div>`
-                            )
-                            .join("");
+                        getRecommendations(
+                            data
+                        )
+                        .map(
+                            (item) =>
+                                `<div class="insight">
+                                    ${item}
+                                </div>`
+                        )
+                        .join("");
 
                 }
 
@@ -1206,7 +1888,10 @@ if (form) {
                         data,
 
                     score:
-                        finalScore
+                        finalScore,
+
+                    stress:
+                        stressAssessment
 
                 };
 
@@ -1239,19 +1924,23 @@ if (form) {
                 );
 
 
-                /* Scroll result into view */
+                /* Scroll */
 
-                if (result) {
+                if (
+                    result
+                ) {
 
                     result.scrollIntoView({
+
                         behavior:
                             "smooth",
+
                         block:
                             "start"
+
                     });
 
                 }
-
 
             }
 
@@ -1267,7 +1956,10 @@ if (form) {
                 const errorTitle =
                     $("error-title");
 
-                if (errorTitle) {
+
+                if (
+                    errorTitle
+                ) {
 
                     errorTitle.textContent =
                         "Prediction Failed";
@@ -1296,7 +1988,9 @@ if (form) {
                 }
 
 
-                if (errorText) {
+                if (
+                    errorText
+                ) {
 
                     errorText.textContent =
                         message;
@@ -1313,7 +2007,9 @@ if (form) {
 
             finally {
 
-                if (submitBtn) {
+                if (
+                    submitBtn
+                ) {
 
                     submitBtn.disabled =
                         false;
@@ -1336,20 +2032,26 @@ const resetBtn =
     $("reset-btn");
 
 
-if (resetBtn) {
+if (
+    resetBtn
+) {
 
     resetBtn.addEventListener(
         "click",
         () => {
 
-            if (form) {
+            if (
+                form
+            ) {
 
                 form.reset();
 
             }
 
 
-            if (stressInput) {
+            if (
+                stressInput
+            ) {
 
                 stressInput.value =
                     "";
@@ -1375,7 +2077,10 @@ if (resetBtn) {
             const meterFill =
                 $("meter-fill");
 
-            if (meterFill) {
+
+            if (
+                meterFill
+            ) {
 
                 meterFill.style.width =
                     "0%";
@@ -1386,7 +2091,10 @@ if (resetBtn) {
             const score =
                 $("score");
 
-            if (score) {
+
+            if (
+                score
+            ) {
 
                 score.textContent =
                     "0.00";
@@ -1394,7 +2102,61 @@ if (resetBtn) {
             }
 
 
-            if (analytics) {
+            /* Reset Stress Result */
+
+            if (
+                stressScoreElement
+            ) {
+
+                stressScoreElement.textContent =
+                    "0";
+
+            }
+
+
+            if (
+                stressLabelElement
+            ) {
+
+                stressLabelElement.textContent =
+                    "—";
+
+            }
+
+
+            if (
+                stressProgressFill
+            ) {
+
+                stressProgressFill.style.width =
+                    "0%";
+
+            }
+
+
+            if (
+                stressReasonsList
+            ) {
+
+                stressReasonsList.innerHTML =
+                    "";
+
+            }
+
+
+            if (
+                stressActionsList
+            ) {
+
+                stressActionsList.innerHTML =
+                    "";
+
+            }
+
+
+            if (
+                analytics
+            ) {
 
                 analytics.classList.add(
                     "hidden"
@@ -1432,7 +2194,9 @@ const retryBtn =
     $("retry-btn");
 
 
-if (retryBtn) {
+if (
+    retryBtn
+) {
 
     retryBtn.addEventListener(
         "click",
@@ -1456,7 +2220,9 @@ const reportBtn =
     $("report-btn");
 
 
-if (reportBtn) {
+if (
+    reportBtn
+) {
 
     reportBtn.addEventListener(
         "click",
@@ -1474,13 +2240,17 @@ const historyBtn =
     $("history-btn");
 
 
-if (historyBtn) {
+if (
+    historyBtn
+) {
 
     historyBtn.addEventListener(
         "click",
         () => {
 
-            if (historyPanel) {
+            if (
+                historyPanel
+            ) {
 
                 historyPanel
                     .classList
@@ -1492,8 +2262,10 @@ if (historyBtn) {
 
                 historyPanel
                     .scrollIntoView({
+
                         behavior:
                             "smooth"
+
                     });
 
             }
@@ -1512,13 +2284,17 @@ const historyClose =
     $("history-close");
 
 
-if (historyClose) {
+if (
+    historyClose
+) {
 
     historyClose.addEventListener(
         "click",
         () => {
 
-            if (historyPanel) {
+            if (
+                historyPanel
+            ) {
 
                 historyPanel
                     .classList
@@ -1542,7 +2318,9 @@ const historyClear =
     $("history-clear");
 
 
-if (historyClear) {
+if (
+    historyClear
+) {
 
     historyClear.addEventListener(
         "click",
@@ -1556,7 +2334,9 @@ if (historyClear) {
             showHistory();
 
 
-            if (historyChart) {
+            if (
+                historyChart
+            ) {
 
                 historyChart.destroy();
 
@@ -1596,6 +2376,10 @@ console.log(
 console.log(
     "Prediction Endpoint:",
     `${API_BASE}/predict`
+);
+
+console.log(
+    "Stress Assessment: 0-24 Low | 25-49 Mild | 50-74 Moderate | 75-100 High"
 );
 
 console.log(

@@ -141,7 +141,7 @@
 
                 Analyze your lifestyle and daily habits
                 with a trained Machine Learning model.
-                Get a wellness score, charts and useful insights.
+                Get a wellness score, stress level, lifestyle factors, charts and personalized educational suggestions.
 
             </p>
 
@@ -508,73 +508,38 @@
 
 
 
-                    <!-- STRESS -->
+                    <!-- STRESS ASSESSMENT -->
 
                     <div class="stress-box">
 
-
                         <div>
-
-                            <b>
-                                Perceived Stress Level
-                            </b>
-
+                            <b>How is your current stress level?</b>
                             <small>
-                                Select the option that best describes you.
+                                Select the option that best describes your current experience.
                             </small>
+                        </div>
+
+                        <div class="stress-buttons" id="stress-buttons">
+
+                            <button type="button" data-value="Low">
+                                Low Stress
+                            </button>
+
+                            <button type="button" data-value="Medium">
+                                Mild Stress
+                            </button>
+
+                            <button type="button" data-value="High">
+                                Moderate Stress
+                            </button>
+
+                            <button type="button" data-value="Very High">
+                                High Stress
+                            </button>
 
                         </div>
 
-
-
-                        <div
-                            class="stress-buttons"
-                            id="stress-buttons">
-
-
-                            <button
-                                type="button"
-                                data-value="Low">
-
-                                Low
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                data-value="Medium">
-
-                                Medium
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                data-value="High">
-
-                                High
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                data-value="Very High">
-
-                                Very High
-
-                            </button>
-
-
-                        </div>
-
-
-                        <input
-                            id="stress_level"
-                            type="hidden">
-
+                        <input id="stress_level" type="hidden">
 
                     </div>
 
@@ -634,8 +599,7 @@
 
                     <p>
 
-                        Complete the form and we'll calculate
-                        your predicted wellness signal.
+                        Complete the form and we'll calculate your wellness and stress signals.
 
                     </p>
 
@@ -834,6 +798,49 @@
 
                     </div>
 
+
+
+                    <!-- STRESS ASSESSMENT RESULT -->
+
+                    <div class="stress-assessment-card">
+
+                        <div class="stress-result-heading">
+                            <div>
+                                <span class="mini-label">STRESS ASSESSMENT</span>
+                                <h3>Your current stress signal</h3>
+                            </div>
+
+                            <div class="stress-score-circle">
+                                <strong id="stress-score">0</strong>
+                                <span>/100</span>
+                            </div>
+                        </div>
+
+                        <div class="stress-progress">
+                            <div id="stress-progress-fill"></div>
+                        </div>
+
+                        <div class="stress-result-row">
+                            <span>Stress Level</span>
+                            <strong id="stress-result-label">—</strong>
+                        </div>
+
+                        <div class="stress-reasons">
+                            <h4>Possible contributing factors</h4>
+                            <ul id="stress-reasons-list"></ul>
+                        </div>
+
+                        <div class="stress-actions">
+                            <h4>What you can do to reduce stress</h4>
+                            <ul id="stress-actions-list"></ul>
+                        </div>
+
+                        <p class="stress-note">
+                            This score is a lifestyle-based educational estimate, not a medical
+                            or clinical diagnosis.
+                        </p>
+
+                    </div>
 
 
                     <!-- ACTIONS -->
@@ -1062,9 +1069,274 @@
 
 
 
-    <!-- JavaScript -->
+    <!-- Stress assessment UI -->
+    <style>
+        .stress-assessment-card{
+            margin-top:24px;
+            padding:22px;
+            border:1px solid rgba(123,47,247,.16);
+            border-radius:18px;
+            background:rgba(123,47,247,.045);
+        }
 
+        .stress-result-heading{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:18px;
+        }
+
+        .stress-result-heading h3{
+            margin:6px 0 0;
+        }
+
+        .stress-score-circle{
+            min-width:76px;
+            height:76px;
+            border-radius:50%;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            background:white;
+            box-shadow:0 8px 24px rgba(0,0,0,.08);
+        }
+
+        .stress-score-circle strong{
+            font-size:24px;
+            line-height:1;
+        }
+
+        .stress-score-circle span{
+            font-size:11px;
+            opacity:.65;
+        }
+
+        .stress-progress{
+            height:10px;
+            margin:18px 0;
+            border-radius:999px;
+            background:rgba(127,127,127,.15);
+            overflow:hidden;
+        }
+
+        #stress-progress-fill{
+            width:0%;
+            height:100%;
+            border-radius:999px;
+            transition:width .6s ease;
+        }
+
+        .stress-result-row{
+            display:flex;
+            justify-content:space-between;
+            gap:15px;
+            padding:12px 0;
+            border-bottom:1px solid rgba(127,127,127,.15);
+        }
+
+        .stress-reasons,
+        .stress-actions{
+            margin-top:18px;
+        }
+
+        .stress-reasons h4,
+        .stress-actions h4{
+            margin-bottom:10px;
+        }
+
+        .stress-reasons ul,
+        .stress-actions ul{
+            margin:0;
+            padding-left:20px;
+        }
+
+        .stress-reasons li,
+        .stress-actions li{
+            margin:8px 0;
+            line-height:1.5;
+        }
+
+        .stress-note{
+            margin-top:18px;
+            font-size:12px;
+            opacity:.7;
+            line-height:1.5;
+        }
+
+        body.dark .stress-score-circle{
+            background:#1d1d28;
+        }
+    </style>
+
+    <!-- JavaScript -->
     <script src="script.js"></script>
+
+    <script>
+        /*
+         * Educational stress estimator
+         * --------------------------------
+         * This is NOT a medical/clinical assessment.
+         * It combines lifestyle inputs into a 0-100 stress signal.
+         */
+        (function () {
+            const form = document.getElementById("predict-form");
+            const stressButtons = document.querySelectorAll("#stress-buttons button");
+            const stressInput = document.getElementById("stress_level");
+
+            const stressScore = document.getElementById("stress-score");
+            const stressLabel = document.getElementById("stress-result-label");
+            const stressFill = document.getElementById("stress-progress-fill");
+            const reasonsList = document.getElementById("stress-reasons-list");
+            const actionsList = document.getElementById("stress-actions-list");
+
+            if (!form || !stressInput) return;
+
+            stressButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    stressButtons.forEach(function (btn) {
+                        btn.classList.remove("active");
+                    });
+
+                    button.classList.add("active");
+                    stressInput.value = button.dataset.value;
+                });
+            });
+
+            function numberValue(id) {
+                const element = document.getElementById(id);
+                const value = parseFloat(element ? element.value : "");
+                return Number.isFinite(value) ? value : 0;
+            }
+
+            function calculateStress() {
+                const sleep = numberValue("sleep_hours_per_night");
+                const screen = numberValue("avg_daily_usage_hours");
+                const unlocks = numberValue("daily_unlocks");
+                const study = numberValue("study_hours");
+                const activity = numberValue("physical_activity_hours");
+                const selfStress = stressInput.value;
+
+                let score = 50;
+                const reasons = [];
+                const actions = [];
+
+                // Self-reported stress has the strongest weight.
+                const selfStressPoints = {
+                    "Low": 5,
+                    "Medium": 25,
+                    "High": 55,
+                    "Very High": 80
+                };
+
+                if (selfStress in selfStressPoints) {
+                    score = 20 + selfStressPoints[selfStress] * 0.7;
+                }
+
+                // Sleep contribution.
+                if (sleep > 0 && sleep < 6) {
+                    score += 15;
+                    reasons.push("Sleep duration is below 6 hours.");
+                    actions.push("Try to keep a regular sleep schedule and allow enough time for sleep.");
+                } else if (sleep >= 6 && sleep < 7) {
+                    score += 7;
+                    reasons.push("Sleep duration is slightly below the usual 7–9 hour range.");
+                    actions.push("Consider gradually increasing your nightly sleep time.");
+                } else if (sleep >= 7 && sleep <= 9) {
+                    score -= 5;
+                }
+
+                // Screen-time contribution.
+                if (screen > 8) {
+                    score += 12;
+                    reasons.push("Daily screen time is quite high.");
+                    actions.push("Reduce unnecessary screen time and take regular screen breaks.");
+                } else if (screen > 6) {
+                    score += 7;
+                    reasons.push("Daily screen time is relatively high.");
+                    actions.push("Set short screen-free periods during the day.");
+                }
+
+                // Phone unlock contribution.
+                if (unlocks > 120) {
+                    score += 8;
+                    reasons.push("Frequent phone unlocking may indicate repeated digital interruptions.");
+                    actions.push("Try notification limits or scheduled phone-free study periods.");
+                } else if (unlocks > 80) {
+                    score += 4;
+                    reasons.push("Phone checking frequency is relatively high.");
+                    actions.push("Group notifications and avoid checking your phone during focused work.");
+                }
+
+                // Study load.
+                if (study > 9) {
+                    score += 10;
+                    reasons.push("Study hours are very high.");
+                    actions.push("Break long study sessions into focused blocks with short breaks.");
+                } else if (study > 7) {
+                    score += 5;
+                    reasons.push("Study workload is relatively high.");
+                    actions.push("Plan realistic study blocks and include recovery breaks.");
+                }
+
+                // Physical activity.
+                if (activity < 0.5) {
+                    score += 8;
+                    reasons.push("Physical activity is quite low.");
+                    actions.push("Add a short walk, stretching, or another enjoyable physical activity.");
+                } else if (activity < 1) {
+                    score += 3;
+                    reasons.push("Physical activity is limited.");
+                    actions.push("Consider adding a little more movement to your daily routine.");
+                } else {
+                    score -= 4;
+                }
+
+                score = Math.max(0, Math.min(100, Math.round(score)));
+
+                let label = "Low Stress";
+                if (score >= 75) {
+                    label = "High Stress";
+                } else if (score >= 50) {
+                    label = "Moderate Stress";
+                } else if (score >= 25) {
+                    label = "Mild Stress";
+                }
+
+                if (reasons.length === 0) {
+                    reasons.push("Your selected lifestyle inputs do not show a major stress-related signal.");
+                }
+
+                if (actions.length === 0) {
+                    actions.push("Continue your healthy routines and keep checking in with your wellbeing.");
+                    actions.push("Maintain regular sleep, movement, study breaks and social connection.");
+                }
+
+                return { score, label, reasons, actions };
+            }
+
+            function showStressAssessment() {
+                const result = calculateStress();
+
+                stressScore.textContent = result.score;
+                stressLabel.textContent = result.label;
+                stressFill.style.width = result.score + "%";
+
+                reasonsList.innerHTML = result.reasons.map(function (item) {
+                    return "<li>" + item + "</li>";
+                }).join("");
+
+                actionsList.innerHTML = result.actions.map(function (item) {
+                    return "<li>" + item + "</li>";
+                }).join("");
+            }
+
+            form.addEventListener("submit", function () {
+                // Let the existing ML dashboard code run as well.
+                setTimeout(showStressAssessment, 150);
+            });
+        })();
+    </script>
 
 
 </body>

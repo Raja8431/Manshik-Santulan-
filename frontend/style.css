@@ -600,6 +600,20 @@ select:focus {
 
     cursor: pointer;
 
+    transition:
+        .2s ease;
+
+}
+
+
+.stress-buttons button:hover {
+
+    border-color: var(--green);
+
+    color: var(--text);
+
+    transform: translateY(-1px);
+
 }
 
 
@@ -988,6 +1002,236 @@ select:focus {
 
 
 /* =========================================
+   STRESS ASSESSMENT RESULT
+========================================= */
+
+.stress-assessment-card {
+
+    margin-top: 24px;
+
+    padding: 22px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 18px;
+
+    background:
+        rgba(94,230,173,.045);
+
+    text-align: left;
+
+}
+
+
+.stress-result-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 18px;
+
+}
+
+
+.stress-result-heading h3 {
+
+    margin-top: 6px;
+
+    font:
+        600 20px
+        "Space Grotesk";
+
+}
+
+
+.stress-score-circle {
+
+    min-width: 78px;
+
+    height: 78px;
+
+    border-radius: 50%;
+
+    background: var(--card);
+
+    border:
+        1px solid var(--line);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.08);
+
+}
+
+
+.stress-score-circle strong {
+
+    font:
+        700 25px
+        "Space Grotesk";
+
+    line-height: 1;
+
+}
+
+
+.stress-score-circle span {
+
+    margin-top: 4px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+.stress-progress {
+
+    width: 100%;
+
+    height: 10px;
+
+    margin: 18px 0;
+
+    border-radius: 999px;
+
+    background: var(--line);
+
+    overflow: hidden;
+
+}
+
+
+#stress-progress-fill {
+
+    width: 0%;
+
+    height: 100%;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--green),
+            var(--yellow),
+            var(--danger)
+        );
+
+    transition:
+        width .6s ease;
+
+}
+
+
+.stress-result-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 12px 0;
+
+    border-bottom:
+        1px solid var(--line);
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+}
+
+
+#stress-result-label {
+
+    color: var(--green);
+
+    font-size: 13px;
+
+}
+
+
+.stress-reasons,
+.stress-actions {
+
+    margin-top: 18px;
+
+}
+
+
+.stress-reasons h4,
+.stress-actions h4 {
+
+    margin-bottom: 10px;
+
+    font:
+        600 13px
+        "Space Grotesk";
+
+}
+
+
+.stress-reasons ul,
+.stress-actions ul {
+
+    margin: 0;
+
+    padding-left: 20px;
+
+}
+
+
+.stress-reasons li,
+.stress-actions li {
+
+    margin: 8px 0;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    line-height: 1.55;
+
+}
+
+
+.stress-actions li {
+
+    color: var(--text);
+
+}
+
+
+.stress-note {
+
+    margin-top: 18px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    line-height: 1.55;
+
+}
+
+
+/* =========================================
    ACTION BUTTONS
 ========================================= */
 
@@ -1315,6 +1559,29 @@ select:focus {
     .result-card {
 
         padding: 21px;
+
+    }
+
+
+    .stress-result-heading {
+
+        align-items: flex-start;
+
+    }
+
+
+    .stress-score-circle {
+
+        min-width: 68px;
+
+        height: 68px;
+
+    }
+
+
+    .stress-result-heading h3 {
+
+        font-size: 17px;
 
     }
 
