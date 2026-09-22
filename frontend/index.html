@@ -8,12 +8,15 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
+    <meta name="description"
+          content="AI-powered student mental health and wellness dashboard">
+
     <title>
         Mental Health Signal | AI Wellness Dashboard
     </title>
 
 
-    <!-- Google Fonts -->
+    <!-- ================= GOOGLE FONTS ================= -->
 
     <link rel="preconnect"
           href="https://fonts.googleapis.com">
@@ -26,12 +29,12 @@
           rel="stylesheet">
 
 
-    <!-- Chart.js -->
+    <!-- ================= CHART JS ================= -->
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-    <!-- CSS -->
+    <!-- ================= CSS ================= -->
 
     <link rel="stylesheet"
           href="style.css">
@@ -42,44 +45,35 @@
 <body>
 
 
-    <!-- Background -->
-
-    <div class="bg-glow glow-one"></div>
-
-    <div class="bg-glow glow-two"></div>
-
-
-
-    <!-- ================= HEADER ================= -->
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
     <header class="topbar">
 
+        <a class="brand"
+           href="#">
 
-        <div class="brand">
-
-            <span class="brand-icon">
+            <b>
                 ✦
-            </span>
+            </b>
 
+            <span>
 
-            <div>
-
-                <b>
+                <strong>
                     Mental Health
-                </b>
+                </strong>
 
                 <small>
                     AI Wellness Dashboard
                 </small>
 
-            </div>
+            </span>
 
-        </div>
+        </a>
 
 
-
-        <div class="top-actions">
-
+        <div>
 
             <button
                 id="history-btn"
@@ -96,12 +90,11 @@
                 id="theme-btn"
                 class="icon-btn"
                 type="button"
-                title="Toggle theme">
+                title="Toggle Theme">
 
                 ☾
 
             </button>
-
 
         </div>
 
@@ -109,65 +102,69 @@
 
 
 
-    <!-- ================= MAIN ================= -->
+    <!-- =====================================================
+         MAIN CONTAINER
+    ====================================================== -->
 
     <main class="container">
 
 
-        <!-- HERO -->
+        <!-- =================================================
+             HERO SECTION
+        ================================================== -->
 
         <section class="hero">
 
-
-            <div class="badge">
-
+            <span class="badge">
                 AI-POWERED STUDENT WELLNESS
-
-            </div>
+            </span>
 
 
             <h1>
 
                 Understand your
 
-                <span>
+                <em>
                     wellness signal.
-                </span>
+                </em>
 
             </h1>
 
 
             <p>
 
-                Analyze your lifestyle and daily habits
-                with a trained Machine Learning model.
-                Get a wellness score, stress level, lifestyle factors, charts and personalized educational suggestions.
+                Analyze your daily habits with your
+                Machine Learning model and explore
+                your mental health score, stress factors,
+                lifestyle insights and practical actions.
 
             </p>
-
 
         </section>
 
 
 
-        <!-- ================= DASHBOARD ================= -->
+        <!-- =================================================
+             MAIN DASHBOARD
+        ================================================== -->
 
         <div class="dashboard">
 
 
-            <!-- ================= FORM ================= -->
+            <!-- =================================================
+                 PROFILE / INPUT FORM
+            ================================================== -->
 
             <section class="card form-card">
 
 
-                <div class="card-head">
-
+                <div class="head">
 
                     <div>
 
-                        <span class="step">
+                        <small>
                             01
-                        </span>
+                        </small>
 
                         <h2>
                             Your Profile
@@ -176,10 +173,9 @@
                     </div>
 
 
-                    <span class="required">
+                    <span>
                         All fields required
                     </span>
-
 
                 </div>
 
@@ -188,10 +184,12 @@
                 <form id="predict-form">
 
 
-                    <!-- PROFILE -->
+                    <!-- ================= PROFILE ================= -->
 
                     <div class="grid three">
 
+
+                        <!-- AGE -->
 
                         <label>
 
@@ -200,14 +198,16 @@
                             <input
                                 id="age"
                                 type="number"
-                                min="10"
+                                min="13"
                                 max="100"
-                                placeholder="22"
+                                placeholder="20"
                                 required>
 
                         </label>
 
 
+
+                        <!-- GENDER -->
 
                         <label>
 
@@ -221,12 +221,20 @@
                                     Select
                                 </option>
 
-                                <option value="Male">
+                                <option>
                                     Male
                                 </option>
 
-                                <option value="Female">
+                                <option>
                                     Female
+                                </option>
+
+                                <option>
+                                    Non-binary
+                                </option>
+
+                                <option>
+                                    Prefer not to say
                                 </option>
 
                             </select>
@@ -234,6 +242,8 @@
                         </label>
 
 
+
+                        <!-- COUNTRY -->
 
                         <label>
 
@@ -249,42 +259,21 @@
                             <datalist id="countries">
 
                                 <option value="India">
-                                <option value="USA">
+                                <option value="United States">
+                                <option value="United Kingdom">
                                 <option value="Canada">
                                 <option value="Australia">
-                                <option value="UK">
                                 <option value="Germany">
-                                <option value="Mexico">
-                                <option value="Turkey">
-                                <option value="France">
 
                             </datalist>
 
                         </label>
 
-
                     </div>
 
 
 
-                    <!-- SECTION 02 -->
-
-                    <div class="section-title">
-
-
-                        <span class="step">
-                            02
-                        </span>
-
-
-                        <h2>
-                            Academic & Digital Habits
-                        </h2>
-
-
-                    </div>
-
-
+                    <!-- ================= EDUCATION ================= -->
 
                     <div class="grid two">
 
@@ -310,7 +299,15 @@
                                 </option>
 
                                 <option>
-                                    Graduate
+                                    Postgraduate
+                                </option>
+
+                                <option>
+                                    PhD
+                                </option>
+
+                                <option>
+                                    Other
                                 </option>
 
                             </select>
@@ -321,7 +318,7 @@
 
                         <label>
 
-                            Most-used Platform
+                            Most Used Platform
 
                             <select
                                 id="most_used_platform"
@@ -331,127 +328,106 @@
                                     Select
                                 </option>
 
-                                <option>Facebook</option>
-                                <option>LinkedIn</option>
-                                <option>Instagram</option>
-                                <option>Snapchat</option>
-                                <option>Twitter</option>
-                                <option>YouTube</option>
-                                <option>TikTok</option>
-                                <option>LINE</option>
-                                <option>KakaoTalk</option>
-                                <option>VKontakte</option>
-                                <option>WhatsApp</option>
-                                <option>WeChat</option>
-
-                            </select>
-
-                        </label>
-
-
-
-                        <label>
-
-                            Primary Purpose
-
-                            <select
-                                id="purpose_of_use"
-                                required>
-
-                                <option value="">
-                                    Select
+                                <option>
+                                    Instagram
                                 </option>
 
                                 <option>
-                                    Networking
+                                    YouTube
                                 </option>
 
                                 <option>
-                                    Education
+                                    WhatsApp
                                 </option>
 
                                 <option>
-                                    Entertainment
+                                    Facebook
                                 </option>
 
                                 <option>
-                                    News
+                                    X
+                                </option>
+
+                                <option>
+                                    Reddit
+                                </option>
+
+                                <option>
+                                    LinkedIn
+                                </option>
+
+                                <option>
+                                    Other
                                 </option>
 
                             </select>
 
                         </label>
 
+                    </div>
+
+
+
+                    <!-- ================= PURPOSE ================= -->
+
+                    <label>
+
+                        Purpose of Use
+
+                        <select
+                            id="purpose_of_use"
+                            required>
+
+                            <option value="">
+                                Select
+                            </option>
+
+                            <option>
+                                Entertainment
+                            </option>
+
+                            <option>
+                                Education
+                            </option>
+
+                            <option>
+                                Communication
+                            </option>
+
+                            <option>
+                                Work
+                            </option>
+
+                            <option>
+                                News
+                            </option>
+
+                            <option>
+                                Mixed
+                            </option>
+
+                        </select>
+
+                    </label>
+
+
+
+                    <!-- ================= DIGITAL HABITS ================= -->
+
+                    <h4>
+                        Digital Habits
+                    </h4>
+
+
+                    <div class="grid two">
 
 
                         <label>
 
-                            Daily Screen Time
-
-                            <i>
-                                hours
-                            </i>
+                            Daily Usage (hours)
 
                             <input
                                 id="avg_daily_usage_hours"
-                                type="number"
-                                min="0"
-                                max="24"
-                                step="0.1"
-                                placeholder="4.5"
-                                required>
-
-                        </label>
-
-
-
-                        <label>
-
-                            Daily Phone Unlocks
-
-                            <input
-                                id="daily_unlocks"
-                                type="number"
-                                min="0"
-                                placeholder="60"
-                                required>
-
-                        </label>
-
-
-                    </div>
-
-
-
-                    <!-- SECTION 03 -->
-
-                    <div class="section-title">
-
-                        <span class="step">
-                            03
-                        </span>
-
-                        <h2>
-                            Lifestyle & Stress
-                        </h2>
-
-                    </div>
-
-
-
-                    <div class="grid three">
-
-
-                        <label>
-
-                            Study Hours / Day
-
-                            <i>
-                                hours
-                            </i>
-
-                            <input
-                                id="study_hours"
                                 type="number"
                                 min="0"
                                 max="24"
@@ -465,11 +441,52 @@
 
                         <label>
 
-                            Physical Activity
+                            Daily Unlocks
 
-                            <i>
-                                hours
-                            </i>
+                            <input
+                                id="daily_unlocks"
+                                type="number"
+                                min="0"
+                                max="1000"
+                                placeholder="50"
+                                required>
+
+                        </label>
+
+                    </div>
+
+
+
+                    <!-- ================= LIFESTYLE ================= -->
+
+                    <h4>
+                        Lifestyle
+                    </h4>
+
+
+                    <div class="grid three">
+
+
+                        <label>
+
+                            Study Hours
+
+                            <input
+                                id="study_hours"
+                                type="number"
+                                min="0"
+                                max="24"
+                                step="0.1"
+                                placeholder="6"
+                                required>
+
+                        </label>
+
+
+
+                        <label>
+
+                            Physical Activity
 
                             <input
                                 id="physical_activity_hours"
@@ -486,11 +503,7 @@
 
                         <label>
 
-                            Sleep / Night
-
-                            <i>
-                                hours
-                            </i>
+                            Sleep Hours
 
                             <input
                                 id="sleep_hours_per_night"
@@ -503,93 +516,113 @@
 
                         </label>
 
-
                     </div>
 
 
 
-                    <!-- STRESS ASSESSMENT -->
+                    <!-- ================= STRESS ================= -->
 
-                    <div class="stress-box">
+                    <h4>
+                        How stressed do you feel?
+                    </h4>
 
-                        <div>
-                            <b>How is your current stress level?</b>
-                            <small>
-                                Select the option that best describes your current experience.
-                            </small>
-                        </div>
 
-                        <div class="stress-buttons" id="stress-buttons">
+                    <div
+                        id="stress-buttons"
+                        class="stress-buttons">
 
-                            <button type="button" data-value="Low">
-                                Low Stress
-                            </button>
 
-                            <button type="button" data-value="Medium">
-                                Mild Stress
-                            </button>
+                        <button
+                            type="button"
+                            data-value="Low">
 
-                            <button type="button" data-value="High">
-                                Moderate Stress
-                            </button>
+                            Low
 
-                            <button type="button" data-value="Very High">
-                                High Stress
-                            </button>
+                        </button>
 
-                        </div>
 
-                        <input id="stress_level" type="hidden">
+                        <button
+                            type="button"
+                            data-value="Medium">
+
+                            Mild
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            data-value="High">
+
+                            Moderate
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            data-value="Very High">
+
+                            High
+
+                        </button>
 
                     </div>
 
 
+                    <input
+                        id="stress_level"
+                        type="hidden"
+                        required>
 
-                    <!-- SUBMIT -->
+
+
+                    <!-- ================= SUBMIT ================= -->
 
                     <button
-                        class="analyze-btn"
                         id="submit-btn"
+                        class="primary-btn"
                         type="submit">
 
                         <span>
                             Analyze My Signal
                         </span>
 
-                        <strong>
+                        <b>
                             →
-                        </strong>
+                        </b>
 
                     </button>
 
 
                 </form>
 
-
             </section>
 
 
 
-            <!-- ================= RESULT ================= -->
+            <!-- =================================================
+                 RESULT SECTION
+            ================================================== -->
 
             <aside class="card result-card">
 
 
-                <!-- IDLE -->
+                <!-- ================= IDLE ================= -->
 
-                <div
-                    id="idle-state"
-                    class="result-state">
+                <div id="idle-state">
 
 
                     <div class="orb">
+
                         ✦
+
                     </div>
 
 
-                    <span class="mini-label">
+                    <small>
                         YOUR RESULT
-                    </span>
+                    </small>
 
 
                     <h2>
@@ -599,129 +632,153 @@
 
                     <p>
 
-                        Complete the form and we'll calculate your wellness and stress signals.
+                        Complete the form to calculate
+                        your wellness signal.
 
                     </p>
-
-
-
-                    <div class="tips">
-
-
-                        <div>
-
-                            01
-
-                            <span>
-                                Complete your daily habits
-                            </span>
-
-                        </div>
-
-
-                        <div>
-
-                            02
-
-                            <span>
-                                Submit for analysis
-                            </span>
-
-                        </div>
-
-
-                        <div>
-
-                            03
-
-                            <span>
-                                Review your score
-                            </span>
-
-                        </div>
-
-
-                    </div>
 
 
                 </div>
 
 
 
-                <!-- LOADING -->
+                <!-- ================= LOADING ================= -->
 
                 <div
                     id="loading-state"
-                    class="result-state hidden">
+                    class="hidden">
 
 
                     <div class="loader">
                     </div>
 
 
-                    <span class="mini-label">
+                    <small>
                         ANALYZING
-                    </span>
+                    </small>
 
 
                     <h2>
                         Reading your signal…
                     </h2>
 
+                </div>
 
-                    <p>
-                        Running your inputs through the ML model.
+
+
+                <!-- ================= ERROR ================= -->
+
+                <div
+                    id="error-state"
+                    class="hidden">
+
+
+                    <div class="error">
+                        !
+                    </div>
+
+
+                    <small>
+                        ERROR
+                    </small>
+
+
+                    <h2 id="error-title">
+                        Prediction failed
+                    </h2>
+
+
+                    <p id="error-text">
                     </p>
 
+
+                    <button
+                        id="retry-btn"
+                        class="secondary"
+                        type="button">
+
+                        Try Again
+
+                    </button>
 
                 </div>
 
 
 
-                <!-- RESULT -->
+                <!-- =================================================
+                     RESULT
+                ================================================== -->
 
                 <div
                     id="result-state"
-                    class="result-state hidden">
+                    class="hidden">
 
 
-                    <span class="mini-label">
-                        PREDICTED WELLNESS SCORE
-                    </span>
+                    <!-- ================= SCORE ================= -->
+
+                    <small>
+                        MENTAL HEALTH SCORE
+                    </small>
 
 
-                    <div class="score-wrap">
+                    <div class="score">
 
-                        <span id="score">
+                        <strong id="score">
                             0.00
-                        </span>
+                        </strong>
 
-                        <small>
+                        <span>
                             /10
-                        </small>
+                        </span>
 
                     </div>
 
 
+
+                    <!-- SCORE METER -->
 
                     <div class="meter">
 
-                        <div
-                            id="meter-fill">
-                        </div>
+                        <i id="meter-fill">
+                        </i>
 
                     </div>
 
 
 
+                    <!-- OVERALL SCORE -->
+
+                    <div class="overall">
+
+
+                        <span>
+
+                            Overall Score
+
+                            <strong id="overall-label">
+                                —
+                            </strong>
+
+                        </span>
+
+
+                        <b id="performance-text">
+                            0%
+                        </b>
+
+                    </div>
+
+
+
+                    <!-- STATUS -->
+
                     <div
                         id="band"
-                        class="band">
+                        class="pill">
 
                         —
 
                     </div>
-
 
 
                     <p id="context">
@@ -729,9 +786,11 @@
 
 
 
-                    <!-- QUICK STATS -->
+                    <!-- =================================================
+                         QUICK STATS
+                    ================================================== -->
 
-                    <div class="quick-stats">
+                    <div class="quick">
 
 
                         <div>
@@ -740,9 +799,9 @@
                                 0
                             </b>
 
-                            <span>
+                            <small>
                                 Sleep h
-                            </span>
+                            </small>
 
                         </div>
 
@@ -753,9 +812,9 @@
                                 0
                             </b>
 
-                            <span>
+                            <small>
                                 Screen h
-                            </span>
+                            </small>
 
                         </div>
 
@@ -766,9 +825,9 @@
                                 0
                             </b>
 
-                            <span>
+                            <small>
                                 Activity h
-                            </span>
+                            </small>
 
                         </div>
 
@@ -779,163 +838,425 @@
                                 —
                             </b>
 
-                            <span>
+                            <small>
                                 Stress
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         STRESS BREAKDOWN
+                    ================================================== -->
+
+                    <section class="stress-card">
+
+
+                        <div class="stress-head">
+
+
+                            <div>
+
+                                <small>
+                                    STRESS BREAKDOWN
+                                </small>
+
+                                <h3>
+                                    Stress Signal
+                                </h3>
+
+                            </div>
+
+
+                            <div class="circle">
+
+                                <b id="stress-score">
+                                    0
+                                </b>
+
+                                <small>
+                                    /10
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- STRESS PROGRESS -->
+
+                        <div class="stress-meter">
+
+                            <i id="stress-progress-fill">
+                            </i>
+
+                        </div>
+
+
+
+                        <!-- 3 STRESS PARTS -->
+
+                        <div class="components">
+
+
+                            <div>
+
+                                <span>
+                                    Emotional Stress
+                                </span>
+
+                                <b id="emotional-stress">
+                                    0/3
+                                </b>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Academic Stress
+                                </span>
+
+                                <b id="academic-stress">
+                                    0/3
+                                </b>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Digital/Lifestyle Stress
+                                </span>
+
+                                <b id="digital-stress">
+                                    0/3
+                                </b>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- STRESS LEVEL -->
+
+                        <div class="overall">
+
+                            <span>
+                                Stress Level
+                            </span>
+
+                            <b id="stress-result-label">
+                                —
+                            </b>
+
+                        </div>
+
+
+
+                        <!-- WHY -->
+
+                        <div class="reason">
+
+                            <h4>
+                                Why this score?
+                            </h4>
+
+
+                            <ul id="stress-reasons-list">
+                            </ul>
+
+                        </div>
+
+
+
+                        <!-- ACTION -->
+
+                        <div class="actions">
+
+                            <h4>
+                                What you can do
+                            </h4>
+
+
+                            <ul id="stress-actions-list">
+                            </ul>
+
+                        </div>
+
+
+                        <small>
+                            Educational estimate only,
+                            not a medical diagnosis.
+                        </small>
+
+                    </section>
+
+
+
+                    <!-- =================================================
+                         WELLNESS CATEGORIES
+                    ================================================== -->
+
+                    <div class="result-grid">
+
+
+                        <div class="mini">
+
+                            <small>
+                                Sleep & Recovery
+                            </small>
+
+                            <b id="recovery-status">
+                                —
+                            </b>
+
+                            <span id="recovery-detail">
+                                —
                             </span>
 
                         </div>
 
 
+
+                        <div class="mini">
+
+                            <small>
+                                Digital Wellness
+                            </small>
+
+                            <b id="digital-status">
+                                —
+                            </b>
+
+                            <span id="digital-detail">
+                                —
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="mini">
+
+                            <small>
+                                Academic Balance
+                            </small>
+
+                            <b id="academic-status">
+                                —
+                            </b>
+
+                            <span id="academic-detail">
+                                —
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="mini">
+
+                            <small>
+                                Top Priority
+                            </small>
+
+                            <b id="top-priority">
+                                —
+                            </b>
+
+                            <span id="priority-detail">
+                                —
+                            </span>
+
+                        </div>
+
                     </div>
 
 
 
-                    <!-- INSIGHTS -->
+                    <!-- =================================================
+                         TOP 3 IMPROVEMENTS
+                    ================================================== -->
 
-                    <div
-                        class="insights"
-                        id="insights">
-
-                    </div>
+                    <section class="box">
 
 
+                        <h3>
+                            Top 3 Things to Improve
+                        </h3>
 
-                    <!-- STRESS ASSESSMENT RESULT -->
 
-                    <div class="stress-assessment-card">
-
-                        <div class="stress-result-heading">
-                            <div>
-                                <span class="mini-label">STRESS ASSESSMENT</span>
-                                <h3>Your current stress signal</h3>
-                            </div>
-
-                            <div class="stress-score-circle">
-                                <strong id="stress-score">0</strong>
-                                <span>/100</span>
-                            </div>
+                        <div id="priority-list">
                         </div>
 
-                        <div class="stress-progress">
-                            <div id="stress-progress-fill"></div>
+                    </section>
+
+
+
+                    <!-- =================================================
+                         WHAT IF SIMULATOR
+                    ================================================== -->
+
+                    <section class="box">
+
+
+                        <small>
+                            WHAT-IF SIMULATOR
+                        </small>
+
+
+                        <h3>
+                            See how habits could change
+                            the score
+                        </h3>
+
+
+
+                        <div class="grid three">
+
+
+                            <label>
+
+                                Extra Sleep
+
+                                <input
+                                    id="sim-sleep"
+                                    type="range"
+                                    min="-2"
+                                    max="2"
+                                    step="0.5"
+                                    value="0">
+
+
+                                <output id="sim-sleep-value">
+                                    0h
+                                </output>
+
+                            </label>
+
+
+
+                            <label>
+
+                                Screen Change
+
+                                <input
+                                    id="sim-screen"
+                                    type="range"
+                                    min="-3"
+                                    max="3"
+                                    step="0.5"
+                                    value="0">
+
+
+                                <output id="sim-screen-value">
+                                    0h
+                                </output>
+
+                            </label>
+
+
+
+                            <label>
+
+                                Extra Activity
+
+                                <input
+                                    id="sim-activity"
+                                    type="range"
+                                    min="-1"
+                                    max="2"
+                                    step="0.5"
+                                    value="0">
+
+
+                                <output id="sim-activity-value">
+                                    0h
+                                </output>
+
+                            </label>
+
                         </div>
 
-                        <div class="stress-result-row">
-                            <span>Stress Level</span>
-                            <strong id="stress-result-label">—</strong>
+
+
+                        <div class="sim-result">
+
+                            <span>
+                                Estimated score
+                            </span>
+
+                            <b id="sim-score">
+                                0.00 / 10
+                            </b>
+
                         </div>
 
-                        <div class="stress-reasons">
-                            <h4>Possible contributing factors</h4>
-                            <ul id="stress-reasons-list"></ul>
-                        </div>
-
-                        <div class="stress-actions">
-                            <h4>What you can do to reduce stress</h4>
-                            <ul id="stress-actions-list"></ul>
-                        </div>
-
-                        <p class="stress-note">
-                            This score is a lifestyle-based educational estimate, not a medical
-                            or clinical diagnosis.
-                        </p>
-
-                    </div>
+                    </section>
 
 
-                    <!-- ACTIONS -->
 
-                    <div class="result-actions">
+                    <!-- =================================================
+                         RESULT BUTTONS
+                    ================================================== -->
+
+                    <div class="buttons">
 
 
                         <button
                             id="report-btn"
-                            class="primary-small"
+                            class="secondary"
                             type="button">
 
-                            ↓ Download Report
+                            Download Report
 
                         </button>
 
 
                         <button
                             id="reset-btn"
-                            class="secondary-btn"
+                            class="secondary"
                             type="button">
 
-                            ↻ Analyze Another
+                            New Assessment
 
                         </button>
 
-
                     </div>
 
-
                 </div>
-
-
-
-                <!-- ERROR -->
-
-                <div
-                    id="error-state"
-                    class="result-state hidden">
-
-
-                    <div class="error-orb">
-                        !
-                    </div>
-
-
-                    <span class="mini-label">
-                        REQUEST ERROR
-                    </span>
-
-
-                    <h2 id="error-title">
-                        Couldn't connect
-                    </h2>
-
-
-                    <p id="error-text">
-                    </p>
-
-
-                    <button
-                        id="retry-btn"
-                        class="secondary-btn"
-                        type="button">
-
-                        Try Again
-
-                    </button>
-
-
-                </div>
-
 
             </aside>
-
 
         </div>
 
 
 
-        <!-- ================= ANALYTICS ================= -->
+        <!-- =================================================
+             ANALYTICS
+        ================================================== -->
 
         <section
             id="analytics"
-            class="analytics hidden">
+            class="hidden analytics">
 
 
-            <div class="section-heading">
+            <div class="head">
 
 
                 <div>
 
-                    <span class="mini-label">
+                    <small>
                         AFTER ANALYSIS
-                    </span>
+                    </small>
 
                     <h2>
                         Your Wellness Dashboard
@@ -946,21 +1267,23 @@
 
                 <button
                     id="history-clear"
-                    class="secondary-btn">
+                    class="secondary"
+                    type="button">
 
                     Clear History
 
                 </button>
 
-
             </div>
 
 
 
-            <div class="analytics-grid">
+            <!-- ================= CHARTS ================= -->
+
+            <div class="charts">
 
 
-                <div class="card chart-card">
+                <div class="card">
 
                     <h3>
                         Lifestyle Profile
@@ -974,7 +1297,7 @@
 
 
 
-                <div class="card chart-card">
+                <div class="card">
 
                     <h3>
                         Score History
@@ -987,62 +1310,142 @@
                 </div>
 
 
+
+                <div class="card">
+
+                    <h3>
+                        Stress Components
+                    </h3>
+
+                    <canvas
+                        id="stress-chart">
+                    </canvas>
+
+                </div>
+
             </div>
 
 
 
-            <!-- RECOMMENDATIONS -->
+            <!-- =================================================
+                 LOWER DASHBOARD
+            ================================================== -->
 
-            <div class="card recommendations">
-
-
-                <h3>
-                    AI Wellness Suggestions
-                </h3>
+            <div class="lower">
 
 
-                <div id="recommendations">
+                <!-- WELLNESS PLAN -->
+
+                <div class="card panel">
+
+                    <h3>
+                        Personalized Wellness Plan
+                    </h3>
+
+
+                    <div id="recommendations">
+                    </div>
+
                 </div>
 
 
-            </div>
 
+                <!-- WEEKLY SUMMARY -->
+
+                <div class="card panel">
+
+                    <h3>
+                        Weekly Summary
+                    </h3>
+
+
+                    <div id="weekly-summary-content">
+                    </div>
+
+                </div>
+
+
+
+                <!-- DAILY TIP -->
+
+                <div class="card panel tip">
+
+
+                    <small>
+                        TODAY'S WELLNESS TIP
+                    </small>
+
+
+                    <h3 id="daily-tip-title">
+                        Small actions count.
+                    </h3>
+
+
+                    <p id="daily-tip-text">
+                        Keep your routine realistic
+                        and consistent.
+                    </p>
+
+                </div>
+
+
+
+                <!-- SUPPORT -->
+
+                <div class="card panel">
+
+
+                    <small>
+                        SUPPORT
+                    </small>
+
+
+                    <h3>
+                        Need additional support?
+                    </h3>
+
+
+                    <p>
+
+                        If stress feels overwhelming
+                        or affects daily life, consider
+                        talking with someone you trust
+                        or a qualified professional.
+
+                    </p>
+
+                </div>
+
+            </div>
 
         </section>
 
 
 
-        <!-- ================= HISTORY ================= -->
+        <!-- =================================================
+             HISTORY
+        ================================================== -->
 
         <section
             id="history-panel"
-            class="card history-panel hidden">
+            class="card history hidden">
 
 
-            <div class="section-heading">
+            <div class="head">
 
-
-                <div>
-
-                    <span class="mini-label">
-                        LOCAL HISTORY
-                    </span>
-
-                    <h2>
-                        Previous Predictions
-                    </h2>
-
-                </div>
+                <h2>
+                    Assessment History
+                </h2>
 
 
                 <button
                     id="history-close"
-                    class="secondary-btn">
+                    class="icon-btn"
+                    type="button">
 
-                    Close
+                    ×
 
                 </button>
-
 
             </div>
 
@@ -1050,294 +1453,43 @@
             <div id="history-list">
             </div>
 
-
         </section>
 
 
 
-        <!-- DISCLAIMER -->
+        <!-- =================================================
+             DISCLAIMER
+        ================================================== -->
 
-        <p class="disclaimer">
+        <p class="notice">
 
-            ⚠ This tool is for educational and informational
-            purposes only. It is not a medical or clinical assessment.
+            🔒 Educational self-reflection only.
+            This dashboard is not a clinical assessment
+            or diagnosis.
 
         </p>
-
 
     </main>
 
 
 
-    <!-- Stress assessment UI -->
-    <style>
-        .stress-assessment-card{
-            margin-top:24px;
-            padding:22px;
-            border:1px solid rgba(123,47,247,.16);
-            border-radius:18px;
-            background:rgba(123,47,247,.045);
-        }
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
 
-        .stress-result-heading{
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:18px;
-        }
+    <footer>
 
-        .stress-result-heading h3{
-            margin:6px 0 0;
-        }
+        MENTAL HEALTH SIGNAL
+        •
+        AI WELLNESS DASHBOARD
 
-        .stress-score-circle{
-            min-width:76px;
-            height:76px;
-            border-radius:50%;
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            justify-content:center;
-            background:white;
-            box-shadow:0 8px 24px rgba(0,0,0,.08);
-        }
+    </footer>
 
-        .stress-score-circle strong{
-            font-size:24px;
-            line-height:1;
-        }
 
-        .stress-score-circle span{
-            font-size:11px;
-            opacity:.65;
-        }
 
-        .stress-progress{
-            height:10px;
-            margin:18px 0;
-            border-radius:999px;
-            background:rgba(127,127,127,.15);
-            overflow:hidden;
-        }
+    <!-- ================= JAVASCRIPT ================= -->
 
-        #stress-progress-fill{
-            width:0%;
-            height:100%;
-            border-radius:999px;
-            transition:width .6s ease;
-        }
-
-        .stress-result-row{
-            display:flex;
-            justify-content:space-between;
-            gap:15px;
-            padding:12px 0;
-            border-bottom:1px solid rgba(127,127,127,.15);
-        }
-
-        .stress-reasons,
-        .stress-actions{
-            margin-top:18px;
-        }
-
-        .stress-reasons h4,
-        .stress-actions h4{
-            margin-bottom:10px;
-        }
-
-        .stress-reasons ul,
-        .stress-actions ul{
-            margin:0;
-            padding-left:20px;
-        }
-
-        .stress-reasons li,
-        .stress-actions li{
-            margin:8px 0;
-            line-height:1.5;
-        }
-
-        .stress-note{
-            margin-top:18px;
-            font-size:12px;
-            opacity:.7;
-            line-height:1.5;
-        }
-
-        body.dark .stress-score-circle{
-            background:#1d1d28;
-        }
-    </style>
-
-    <!-- JavaScript -->
     <script src="script.js"></script>
-
-    <script>
-        /*
-         * Educational stress estimator
-         * --------------------------------
-         * This is NOT a medical/clinical assessment.
-         * It combines lifestyle inputs into a 0-100 stress signal.
-         */
-        (function () {
-            const form = document.getElementById("predict-form");
-            const stressButtons = document.querySelectorAll("#stress-buttons button");
-            const stressInput = document.getElementById("stress_level");
-
-            const stressScore = document.getElementById("stress-score");
-            const stressLabel = document.getElementById("stress-result-label");
-            const stressFill = document.getElementById("stress-progress-fill");
-            const reasonsList = document.getElementById("stress-reasons-list");
-            const actionsList = document.getElementById("stress-actions-list");
-
-            if (!form || !stressInput) return;
-
-            stressButtons.forEach(function (button) {
-                button.addEventListener("click", function () {
-                    stressButtons.forEach(function (btn) {
-                        btn.classList.remove("active");
-                    });
-
-                    button.classList.add("active");
-                    stressInput.value = button.dataset.value;
-                });
-            });
-
-            function numberValue(id) {
-                const element = document.getElementById(id);
-                const value = parseFloat(element ? element.value : "");
-                return Number.isFinite(value) ? value : 0;
-            }
-
-            function calculateStress() {
-                const sleep = numberValue("sleep_hours_per_night");
-                const screen = numberValue("avg_daily_usage_hours");
-                const unlocks = numberValue("daily_unlocks");
-                const study = numberValue("study_hours");
-                const activity = numberValue("physical_activity_hours");
-                const selfStress = stressInput.value;
-
-                let score = 50;
-                const reasons = [];
-                const actions = [];
-
-                // Self-reported stress has the strongest weight.
-                const selfStressPoints = {
-                    "Low": 5,
-                    "Medium": 25,
-                    "High": 55,
-                    "Very High": 80
-                };
-
-                if (selfStress in selfStressPoints) {
-                    score = 20 + selfStressPoints[selfStress] * 0.7;
-                }
-
-                // Sleep contribution.
-                if (sleep > 0 && sleep < 6) {
-                    score += 15;
-                    reasons.push("Sleep duration is below 6 hours.");
-                    actions.push("Try to keep a regular sleep schedule and allow enough time for sleep.");
-                } else if (sleep >= 6 && sleep < 7) {
-                    score += 7;
-                    reasons.push("Sleep duration is slightly below the usual 7–9 hour range.");
-                    actions.push("Consider gradually increasing your nightly sleep time.");
-                } else if (sleep >= 7 && sleep <= 9) {
-                    score -= 5;
-                }
-
-                // Screen-time contribution.
-                if (screen > 8) {
-                    score += 12;
-                    reasons.push("Daily screen time is quite high.");
-                    actions.push("Reduce unnecessary screen time and take regular screen breaks.");
-                } else if (screen > 6) {
-                    score += 7;
-                    reasons.push("Daily screen time is relatively high.");
-                    actions.push("Set short screen-free periods during the day.");
-                }
-
-                // Phone unlock contribution.
-                if (unlocks > 120) {
-                    score += 8;
-                    reasons.push("Frequent phone unlocking may indicate repeated digital interruptions.");
-                    actions.push("Try notification limits or scheduled phone-free study periods.");
-                } else if (unlocks > 80) {
-                    score += 4;
-                    reasons.push("Phone checking frequency is relatively high.");
-                    actions.push("Group notifications and avoid checking your phone during focused work.");
-                }
-
-                // Study load.
-                if (study > 9) {
-                    score += 10;
-                    reasons.push("Study hours are very high.");
-                    actions.push("Break long study sessions into focused blocks with short breaks.");
-                } else if (study > 7) {
-                    score += 5;
-                    reasons.push("Study workload is relatively high.");
-                    actions.push("Plan realistic study blocks and include recovery breaks.");
-                }
-
-                // Physical activity.
-                if (activity < 0.5) {
-                    score += 8;
-                    reasons.push("Physical activity is quite low.");
-                    actions.push("Add a short walk, stretching, or another enjoyable physical activity.");
-                } else if (activity < 1) {
-                    score += 3;
-                    reasons.push("Physical activity is limited.");
-                    actions.push("Consider adding a little more movement to your daily routine.");
-                } else {
-                    score -= 4;
-                }
-
-                score = Math.max(0, Math.min(100, Math.round(score)));
-
-                let label = "Low Stress";
-                if (score >= 75) {
-                    label = "High Stress";
-                } else if (score >= 50) {
-                    label = "Moderate Stress";
-                } else if (score >= 25) {
-                    label = "Mild Stress";
-                }
-
-                if (reasons.length === 0) {
-                    reasons.push("Your selected lifestyle inputs do not show a major stress-related signal.");
-                }
-
-                if (actions.length === 0) {
-                    actions.push("Continue your healthy routines and keep checking in with your wellbeing.");
-                    actions.push("Maintain regular sleep, movement, study breaks and social connection.");
-                }
-
-                return { score, label, reasons, actions };
-            }
-
-            function showStressAssessment() {
-                const result = calculateStress();
-
-                stressScore.textContent = result.score;
-                stressLabel.textContent = result.label;
-                stressFill.style.width = result.score + "%";
-
-                reasonsList.innerHTML = result.reasons.map(function (item) {
-                    return "<li>" + item + "</li>";
-                }).join("");
-
-                actionsList.innerHTML = result.actions.map(function (item) {
-                    return "<li>" + item + "</li>";
-                }).join("");
-            }
-
-            form.addEventListener("submit", function () {
-                // Let the existing ML dashboard code run as well.
-                setTimeout(showStressAssessment, 150);
-            });
-        })();
-    </script>
-
 
 </body>
 
